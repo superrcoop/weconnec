@@ -2,18 +2,47 @@
 Vue.component('app-header', {
     template: `
         <div class="container">
-          <div class="flux"><router-link class="flux" to="/">Photogram</router-link></div>
-        </div>
+      <div class="header_section">
+        <div class="logo"><a href="javascript:void(0)"><img src="img/logob.png" alt=""></a></div>
+        <nav class="nav" id="nav">
+          <ul class="toggle">
+            <li><a href="#top_content">Home</a></li>
+            <li><a href="#service">Services</a></li>
+            <li><a href="#work_outer">Work</a></li>
+            <li><a href="#Portfolio">Portfolio</a></li>
+            <li><a href="#client_outer">Clients</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+          <ul class="">
+            <li><a href="#top_content">Home</a></li>
+            <li><a href="#service">Services</a></li>
+            <li><a href="#work_outer">Work</a></li>
+            <li><a href="#Portfolio">Portfolio</a></li>
+            <li><a href="#client_outer">Clients</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <a class="res-nav_click animated wobble wow" href="javascript:void(0)"><i class="fa-bars"></i></a> </div>
+    </div>
     `
 });
 
 Vue.component('app-footer', {
     template: `
-    <footer>
-      <div class="footer">
-        <p>&copy; Photogram 2018. All Rights Reserved </p>
-      </div>
-    </footer>
+   <footer class="footer_section" id="contact">
+    <div class="c-logo-part">
+    <div class="container">
+      <ul class="delay-06s animated  bounce wow">
+        <li><a href="javascript:void(0)"><img src="img/c-liogo1.png" alt=""></a></li>
+        <li><a href="javascript:void(0)"><img src="img/c-liogo2.png" alt=""></a></li>
+        <li><a href="javascript:void(0)"><img src="img/c-liogo3.png" alt=""></a></li>
+        <li><a href="javascript:void(0)"><img src="img/c-liogo5.png" alt=""></a></li>
+      </ul>
+    </div>
+  </div>
+  </footer>
     `
 });
 const Register = Vue.component('registration',{
@@ -128,7 +157,53 @@ const Register = Vue.component('registration',{
 
 const Home = Vue.component('home',{
   template:`
-      
+      <!--Top_content-->
+  <section id="top_content" class="top_cont_outer">
+    <div class="top_cont_inner">
+      <div class="container">
+        <div class="top_content">
+          <div class="row">
+            <div class="col-lg-5 col-sm-7">
+              <div class="top_left_cont flipInY wow animated">
+                <h3>Colourful &amp; sexy!</h3>
+                <h2>creating websites that
+                make you stop &amp; stare</h2>
+                <p> Accusantium quam, aliquam ultricies eget tempor id, aliquam eget nibh et. Maecen aliquam, risus at semper. Proin iaculis purus consequat sem cure digni ssim. Donec porttitora entum. </p>
+                <a href="#service" class="learn_more2">Learn more</a> </div>
+            </div>
+            <div class="col-lg-7 col-sm-5"> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container" id="service">
+      <h2>Services</h2>
+      <div class="service_area">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="service_block">
+              <div class="service_icon delay-03s animated wow  zoomIn"> <span><i class="fa-flash"></i></span> </div>
+              <h3 class="animated fadeInUp wow">Quick TurnAround</h3>
+              <p class="animated fadeInDown wow">Proin iaculis purus consequat sem cure digni. Donec porttitora entum suscipit aenean rhoncus posuere odio in tincidunt.</p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="service_block">
+              <div class="service_icon icon2  delay-03s animated wow zoomIn"> <span><i class="fa-comments"></i></span> </div>
+              <h3 class="animated fadeInUp wow">Friendly Support</h3>
+              <p class="animated fadeInDown wow">Proin iaculis purus consequat sem cure digni. Donec porttitora entum suscipit aenean rhoncus posuere odio in tincidunt.</p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="service_block">
+              <div class="service_icon icon3  delay-03s animated wow zoomIn"> <span><i class="fa-shield"></i></span> </div>
+              <h3 class="animated fadeInUp wow">top Security</h3>
+              <p class="animated fadeInDown wow">Proin iaculis purus consequat sem cure digni. Donec porttitora entum suscipit aenean rhoncus posuere odio in tincidunt.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
       <div class="agile_ihj">
         <div class="w3l_but">
           <router-link class="w3l_but" to="/login"><button>Login</button></router-link>
@@ -142,6 +217,7 @@ const Home = Vue.component('home',{
       
       <div class="clear"></div>
       </div>
+      </section>
 
 `,
   data: function(){
