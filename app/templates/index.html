@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %} <title>weconnec</title>{% endblock%}
+{% block main %}
+<div id="app">
+	 {% with messages = get_flashed_messages()
+ 		%}
+   		{% if messages %}
+     <ul class="flashes">
+     {% for message in messages %}
+       <li>{{ message }}</li>
+     {% endfor %}
+     </ul>
+   {% endif %}
+ 		{% endwith %}
+    <app-header></app-header>
+
+    <main>
+        <div class="container">
+            <!-- component matched by the route will render here -->
+            <router-view></router-view>
+        </div>
+    </main>
+
+    <app-footer></app-footer>
+</div>
+{% endblock %}
