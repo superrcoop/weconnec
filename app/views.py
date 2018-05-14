@@ -207,16 +207,6 @@ def get_profile(username):
     else:
         return jsonify({'errors':error})
 
-@app.route('/api/users/<username>/bio/update', methods = ['POST'])
-@login_required
-@requires_auth
-def update_profile_bio(username):
-    error=None
-    if request.method =='POST':
-        return jsonify({'errors': error})
-    else:
-        return jsonify({'errors':error})
-
 @app.route('/api/users/<int:username>/profile_photo/update', methods = ['POST'])
 @login_required
 @requires_auth

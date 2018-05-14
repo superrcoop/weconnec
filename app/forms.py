@@ -19,4 +19,4 @@ class RegistrationForm(FlaskForm):
 	location = StringField('Location', validators = [DataRequired('Whats your location?')])
 
 class SearchForm(FlaskForm):
-	search=	StringField('Search', validators = [DataRequired('Search something?')])
+	search=	StringField('Search', validators = [DataRequired('Search something...')])
