@@ -1,93 +1,144 @@
 Vue.component('app-header', {
     template: `
-        <div class="container">
-      <div class="header_section">
-        <div class="logo"><a href="javascript:void(0)"><img src="img/logob.png" alt=""></a></div>
-        <nav class="nav" id="nav">
-          <ul class="toggle">
-            <li><a href="#top_content">Home</a></li>
-            <li><a href="#service">Services</a></li>
-            <li><a href="#work_outer">Work</a></li>
-            <li><a href="#Portfolio">Portfolio</a></li>
-            <li><a href="#client_outer">Clients</a></li>
-            <li><a href="#team">Team</a></li>
-            <li><a href="#contact">Contact</a></li>
+    <nav class=" navbar-dark bg-dark navbar navbar-expand-lg fixed-top">
+      <a class="navbar-brand" href="#">weconnec</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item active">
+            <router-link class="nav-link" to="/">Home <span class="sr-only">(current)</span></router-link>
+          </li>
+          <li class="nav-item ">
+            <router-link class="nav-link" to="/api/upload"> Upload Form </router-link>
+          </li>
+          <li class="nav-item ">
+            <router-link class="nav-link" to=""> Profile </router-link>
+          </li>
+          <li class="nav-item ">
+            <router-link class="nav-link" to=""> Resources </router-link>
+          </li>
           </ul>
-          <ul class="">
-            <li><a href="#top_content">Home</a></li>
-            <li><a href="#service">Services</a></li>
-            <li><a href="#work_outer">Work</a></li>
-            <li><a href="#Portfolio">Portfolio</a></li>
-            <li><a href="#client_outer">Clients</a></li>
-            <li><a href="#team">Team</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </nav>
-        <a class="res-nav_click animated wobble wow" href="javascript:void(0)"><i class="fa-bars"></i></a> </div>
-    </div>
+            <form class="navbar-form my-2 my-lg-0 form-inline" role="form">
+              <div class="form-group">
+                <label class="sr-only" for="Email">Email</label>
+                <input type="email" class="form-control mr-sm-2" id="Email" placeholder="Email" autofocus required />
+              </div></br>
+              <div class="form-group">
+                <label class="sr-only" for="Password">Password</label>
+                <input type="password" class="form-control mr-sm-2" id="Password" placeholder="Password" required />
+              </div>
+              <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Sign in</button>
+            </form>
+          <button type="button" class="btn btn-outline-secondary my-2 my-sm-0">Register</button>
+          
+        </div>
+      </div>
+    </nav>
     `
 });
 
 Vue.component('app-footer', {
     template: `
-   <footer class="footer_section" id="contact">
-    <div class="c-logo-part">
-    <div class="container">
-      <ul class="delay-06s animated  bounce wow">
-        <li><a href="javascript:void(0)"><img src="img/c-liogo1.png" alt=""></a></li>
-        <li><a href="javascript:void(0)"><img src="img/c-liogo2.png" alt=""></a></li>
-        <li><a href="javascript:void(0)"><img src="img/c-liogo3.png" alt=""></a></li>
-        <li><a href="javascript:void(0)"><img src="img/c-liogo5.png" alt=""></a></li>
+    
+<div class="copyright">
+  <div class="container">
+    <div class="col-md-6">
+      <p>© 2016 - weconnec</p>
+    </div>
+    <div class="col-md-6">
+      <ul class="bottom_ul">
+        <li><a href="#">webenlance.com</a></li>
+        <li><a href="#">About us</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Faq's</a></li>
+        <li><a href="#">Contact us</a></li>
+        <li><a href="#">Site Map</a></li>
       </ul>
     </div>
   </div>
-  </footer>
+</div>
     `
 });
 
-Vue.component('app-services', {
+Vue.component('search', {
     template: `
-    <div class="top_cont_latest" id="work_outer">
-      <div class="container">
-        <h2>Latest Work</h2>
-        <div class="work_section">
-          <div class="row">
-            <div class="col-lg-6 col-sm-6 wow fadeInLeft delay-05s">
-              <div class="service-list">
-                <div class="service-list-col1"> <i class="icon-doc"></i> </div>
-                <div class="service-list-col2">
-                  <h3>Process Walkthrough</h3>
-                  <p>Proin iaculis purus digni consequat sem digni ssim. Donec entum digni ssim.</p>
+  
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+            <div class="input-group" id="adv-search">
+                <input type="text" class="form-control" placeholder="Search" />
+                <div class="input-group-btn">
+                    <div class="btn-group" role="group">
+                        <div class="dropdown dropdown-lg">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                            <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                <form class="form-horizontal" role="form">
+                                  <div class="form-group">
+                                    <label for="filter">Filter by</label>
+                                    <select class="form-control">
+                                        <option value="0" selected>All Snippets</option>
+                                        <option value="1">Featured</option>
+                                        <option value="2">Most popular</option>
+                                        <option value="3">Top rated</option>
+                                        <option value="4">Most commented</option>
+                                    </select>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="contain">Author</label>
+                                    <input class="form-control" type="text" />
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="contain">Contains the words</label>
+                                    <input class="form-control" type="text" />
+                                  </div>
+                                  <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                                </form>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                    </div>
                 </div>
-              </div>
-              <div class="service-list">
-                <div class="service-list-col1"> <i class="icon-comment"></i> </div>
-                <div class="service-list-col2">
-                  <h3>24/7 support</h3>
-                  <p>Proin iaculis purus consequat sem digni ssim. Digni ssim porttitora .</p>
-                </div>
-              </div>
-              <div class="service-list">
-                <div class="service-list-col1"> <i class="icon-database"></i> </div>
-                <div class="service-list-col2">
-                  <h3>Hosting & Storage</h3>
-                  <p>Proin iaculis purus consequat digni sem digni ssim. Purus donec porttitora entum.</p>
-                </div>
-              </div>
-              <div class="service-list">
-                <div class="service-list-col1"> <i class="icon-cog"></i> </div>
-                <div class="service-list-col2">
-                  <h3>Customization options</h3>
-                  <p>Proin iaculis purus consequat sem digni ssim. Sem porttitora entum.</p>
-                </div>
-              </div>
-              <div class="work_bottom"> <span>Ready to take the plunge?</span> <a href="#contact" class="contact_btn">Contact Us</a> </div>
             </div>
-            <figure class="col-lg-6 col-sm-6  text-right wow fadeInUp delay-02s"> </figure>
+          </div>
+        </div>
+  </div>
+</div>`
+});
+
+
+const Home = Vue.component('home',{
+  template:`
+  <div class="top_cont_outer">
+    <div class="top_cont_inner">
+      <div class="container">
+        <div class="top_content">
+          <div class="row">
+            <div class="col-lg-5 col-sm-7">
+              <div class="top_left_cont flipInY wow animated">
+                <h3>Weconnec</h3>
+                <h2>Connecting students everywhere</h2>
+                <p> Accusantium quam, aliquam ultricies eget tempor id, aliquam eget nibh et. Maecen aliquam, risus at semper. Proin iaculis purus consequat sem cure digni ssim. Donec porttitora entum. </p>
+                <a href="#service" class="learn_more2">Learn more</a> </div>
+            </div>
+            <div class="col-lg-7 col-sm-5"> </div>
           </div>
         </div>
       </div>
-    </div>`
+    </div>
+    
+      </div>
+
+
+
+`,
+  data: function(){
+    return{
+    }
+  }
 });
 
 
@@ -135,6 +186,38 @@ const Register = Vue.component('registration',{
       
       <div class="clear"></div>
     </div>
+
+
+
+<div class="card">
+<article class="card-body">
+  <h4 class="card-title text-center mb-4 mt-1">Sign in</h4>
+  <hr>
+  <p class="text-success text-center">Some message goes here</p>
+  <form>
+  <div class="form-group">
+  <div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+     </div>
+    <input name="" class="form-control" placeholder="Email or login" type="email">
+  </div> <!-- input-group.// -->
+  </div> <!-- form-group// -->
+  <div class="form-group">
+  <div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+     </div>
+      <input class="form-control" placeholder="******" type="password">
+  </div> <!-- input-group.// -->
+  </div> <!-- form-group// -->
+  <div class="form-group">
+  <button type="submit" class="btn btn-primary btn-block"> Login  </button>
+  </div> <!-- form-group// -->
+  <p class="text-center"><a href="#" class="btn">Forgot password?</a></p>
+  </form>
+</article>
+</div> <!-- card.// -->
 
 `,
   data: function(){
@@ -201,76 +284,6 @@ const Register = Vue.component('registration',{
     }
 });
 
-const Home = Vue.component('home',{
-  template:`
-      <!--Top_content-->
-  <section id="top_content" class="top_cont_outer">
-    <div class="top_cont_inner">
-      <div class="container">
-        <div class="top_content">
-          <div class="row">
-            <div class="col-lg-5 col-sm-7">
-              <div class="top_left_cont flipInY wow animated">
-                <h3>Colourful &amp; sexy!</h3>
-                <h2>creating websites that
-                make you stop &amp; stare</h2>
-                <p> Accusantium quam, aliquam ultricies eget tempor id, aliquam eget nibh et. Maecen aliquam, risus at semper. Proin iaculis purus consequat sem cure digni ssim. Donec porttitora entum. </p>
-                <a href="#service" class="learn_more2">Learn more</a> </div>
-            </div>
-            <div class="col-lg-7 col-sm-5"> </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container" id="service">
-      <h2>Services</h2>
-      <div class="service_area">
-        <div class="row">
-          <div class="col-lg-4">
-            <div class="service_block">
-              <div class="service_icon delay-03s animated wow  zoomIn"> <span><i class="fa-flash"></i></span> </div>
-              <h3 class="animated fadeInUp wow">Quick TurnAround</h3>
-              <p class="animated fadeInDown wow">Proin iaculis purus consequat sem cure digni. Donec porttitora entum suscipit aenean rhoncus posuere odio in tincidunt.</p>
-            </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="service_block">
-              <div class="service_icon icon2  delay-03s animated wow zoomIn"> <span><i class="fa-comments"></i></span> </div>
-              <h3 class="animated fadeInUp wow">Friendly Support</h3>
-              <p class="animated fadeInDown wow">Proin iaculis purus consequat sem cure digni. Donec porttitora entum suscipit aenean rhoncus posuere odio in tincidunt.</p>
-            </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="service_block">
-              <div class="service_icon icon3  delay-03s animated wow zoomIn"> <span><i class="fa-shield"></i></span> </div>
-              <h3 class="animated fadeInUp wow">top Security</h3>
-              <p class="animated fadeInDown wow">Proin iaculis purus consequat sem cure digni. Donec porttitora entum suscipit aenean rhoncus posuere odio in tincidunt.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-      <div class="agile_ihj">
-        <div class="w3l_but">
-          <router-link class="w3l_but" to="/login"><button>Login</button></router-link>
-        </div>
-        <div class="agile_par">
-          <h2>or</h2>
-        </div>
-        <div class="w3l_but">
-          <router-link class="w3l_but" to="/register"><button>Register Now</button></router-link>
-        </div>
-      
-      <div class="clear"></div>
-      </div>
-      </section>
-
-`,
-  data: function(){
-    return{
-    }
-  }
-});
 
 const Login = Vue.component('login',{
   template:`

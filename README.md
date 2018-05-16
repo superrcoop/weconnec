@@ -11,11 +11,11 @@ This Web app requires the latest version of [Python and Flask](http://flask.poco
 
 Clone the repository:
 
-`$ git clone https://github.com/superrcoop/photogram.git`
+`$ git clone https://github.com/superrcoop/weconnec.git`
 
 Go into the repository:
 
-`$ cd photogram`
+`$ cd weconnec`
 
 Install dependencies:
 

@@ -17,8 +17,6 @@
 	/****Ipad Portrait 768 Container 750 ****/
 	body{ font-size:13px;}
 	p{ line-height:20px ;}
-	.header h1{ font-size:46px;}
-	.main-nav ul li a{ padding:14px;}
 	.small-logo{ padding:0 20px;}
 	h2{ font-size:30px}
 	h6{ font-size:16px;}
@@ -33,8 +31,6 @@
 	.contact-info-box{ margin:0 ;}
 	.social-link{ margin:0;}
 	
-	.main-nav{ display:block !important; }
-	.main-nav li a{ padding:8px 15px;}
 	.top_cont_inner{ background-size:327px;}
 	
 	.top_cont_latest{ background-size:327px;}
@@ -87,12 +83,6 @@
 	.we-create li{ font-size:13px; padding:0 0 0 8px}
 	.header h1{ font-size:28px;}
 	.header{ padding:60px 0;}
-	.main-section{ padding:60px 0 70px;}
-	.main-nav{ display:none; position:absolute; left:0; width:100%; top:74px; margin:0 auto; flote : none; background:#fff;}
-	.main-nav li{ display:block;}
-	.main-nav li.small-logo{ display:none;}
-	.main-nav li a{ display:block; padding:7px 32px; border-bottom:none;}
-	.main-nav li a:hover{color:#7cc576}
 	.team-leader-box{ max-width:307px; width:auto; float:none; margin:0 auto;	}
 	.team-leader-box:nth-of-type(3n){ margin:0 auto}
 	.res-nav_click{ display:block;}
@@ -112,39 +102,7 @@
 	.client-part-haead{ font-size:20px; line-height:30px;}
 	.link{ font-size:14px; padding:10px 25px;}
 	.logo{ width:100px;}
-	.main-section.contact{ background-size:contain;}
-	.Portfolio-nav li a{ padding:5px 16px;}
-	.Portfolio-nav li{ display:block;}
-	/*.isotope-item img{ width:300px; left:50%; margin-left:-100px;}
-	.isotope-item{ width:300px; margin:0px auto;}
-	.isotope{ width:400px; margin:0px auto;}
-	.Portfolio-box{}
-	.portfolioContainer{ width:350px; margin:0px auto !important; } */
-	
-	.portfolioContainer { max-width:350px; margin:0px auto;}
 	.logo{ margin:0px auto 10px; float:none; }
-	.nav{ float:none; position:absolute; width:100%; top: 73px;}
-	
-	toggle.ul{ background:#fff; width:100%;}
-	.nav ul li{ border-bottom:1px solid #CCC; display:block; float:none; width:100%; margin:0px; text-align:center;}
-	.nav ul li a{ padding:6px 0px}
-	.res-nav_click{ 
-		bottom: -42px;
-		display: block;
-		font-size: 25px;
-		left: 48%;
-		position: absolute;
-	}
-	.res-nav_click a{ text-decoration:none;}
-	.res-nav_click a:hover{ text-decoration:none; color:#060;}
-	.nav ul{ background:#fff; display:none;}
-	
-.nav ul.toggle{
-	display:none;
-	visibility:visible;
-	height:auto;
-	overflow:auto;
-	}
 	
 .work_pic {
     position: relative;
