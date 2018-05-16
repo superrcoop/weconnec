@@ -54,9 +54,9 @@ Vue.component('app-header', {
 
 Vue.component('app-footer', {
     template: `
-    <footer>
+    <footer class="navbar fixed-bottom">
         <div class="container">
-            <p>Copyright &copy; Flask Inc.</p>
+            <p>Copyright &copy; weconnec</p>
         </div>
     </footer>
     `
@@ -64,54 +64,41 @@ Vue.component('app-footer', {
 
 Vue.component('search', {
     template: `
-  
-<div class="container">
+    <section id="Search">
+    <h2>Search</h2>
+    <div class="container">
   <div class="row">
-    <div class="col-md-12">
-            <div class="input-group" id="adv-search">
-                <input type="text" class="form-control" placeholder="Search" />
-                <div class="input-group-btn">
-                    <div class="btn-group" role="group">
-                        <div class="dropdown dropdown-lg">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
-                            <div class="dropdown-menu dropdown-menu-right" role="menu">
-                                <form class="form-horizontal" role="form">
-                                  <div class="form-group">
-                                    <label for="filter">Filter by</label>
-                                    <select class="form-control">
-                                        <option value="0" selected>All Snippets</option>
-                                        <option value="1">Featured</option>
-                                        <option value="2">Most popular</option>
-                                        <option value="3">Top rated</option>
-                                        <option value="4">Most commented</option>
-                                    </select>
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="contain">Author</label>
-                                    <input class="form-control" type="text" />
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="contain">Contains the words</label>
-                                    <input class="form-control" type="text" />
-                                  </div>
-                                  <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-                                </form>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-                    </div>
-                </div>
-            </div>
-          </div>
+        <div class="col-md-12 ">
+            <div class="input-group">
+  <input type="text" class="form-control" aria-label="Text input with segmented dropdown button" placeholder="Ask a question or search for a document or phrase/quote eg. What is a neural network? or How do fishes breathe? ">
+  <div class="input-group-append">
+    <button type="button" class="btn btn-outline-secondary">Search</button>
+    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+     <span class="sr-only">Toggle Dropdown</span> Advanced
+    </button>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="#">Action</a>
+      <a class="dropdown-item" href="#">Another action</a>
+      <a class="dropdown-item" href="#">Something else here</a>
+      <div role="separator" class="dropdown-divider"></div>
+      <a class="dropdown-item" href="#">Separated link</a>
+    </div>
+  </div>
+</div>
         </div>
   </div>
-</div>`
+</div>
+  </section>
+  
+
+  
+        `
 });
 
 
 const Home = Vue.component('home',{
   template:`
-  <div class="top_cont_outer">
+  <section class="top_cont_outer">
     <div class="top_cont_inner">
       <div class="container">
         <div class="top_content">
@@ -190,7 +177,7 @@ const Home = Vue.component('home',{
 
       </div>
     </div>
-      </div>
+      </section>
 
 `,
   data: function(){
