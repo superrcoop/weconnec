@@ -12,7 +12,10 @@ Vue.component('app-header', {
             <router-link class="nav-link" to="/">Home <span class="sr-only">(current)</span></router-link>
           </li>
           <li class="nav-item ">
-            <router-link class="nav-link" to="/api/upload"> Upload Form </router-link>
+            <router-link class="nav-link" to=""> About</router-link>
+          </li>
+          <li class="nav-item ">
+            <router-link class="nav-link" to=""> Upload </router-link>
           </li>
           <li class="nav-item ">
             <router-link class="nav-link" to=""> Profile </router-link>
@@ -20,19 +23,28 @@ Vue.component('app-header', {
           <li class="nav-item ">
             <router-link class="nav-link" to=""> Resources </router-link>
           </li>
+          
           </ul>
             <form class="navbar-form my-2 my-lg-0 form-inline" role="form">
-              <div class="form-group">
-                <label class="sr-only" for="Email">Email</label>
-                <input type="email" class="form-control mr-sm-2" id="Email" placeholder="Email" autofocus required />
-              </div></br>
-              <div class="form-group">
-                <label class="sr-only" for="Password">Password</label>
-                <input type="password" class="form-control mr-sm-2" id="Password" placeholder="Password" required />
-              </div>
-              <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Sign in</button>
+    <label class="sr-only" for="inlineFormInputGroupUsername2">username</label>
+  <div class="input-group mb-2 mr-sm-2">
+    <div class="input-group-prepend">
+      <div class="input-group-text">@</div>
+    </div>
+    <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="username">
+  </div>
+
+
+  <label class="sr-only" for="inlineFormInputGroupUsername2">Password</label>
+  <div class="input-group mb-2 mr-sm-2">
+    <div class="input-group-prepend">
+      <div class="input-group-text">@</div>
+    </div>
+    <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="Password">
+  </div>
+             
+              <button type="submit" class="btn btn-outline-light mb-2">Sign in</button>
             </form>
-          <button type="button" class="btn btn-outline-secondary my-2 my-sm-0">Register</button>
           
         </div>
       </div>
@@ -42,24 +54,11 @@ Vue.component('app-header', {
 
 Vue.component('app-footer', {
     template: `
-    
-<div class="copyright">
-  <div class="container">
-    <div class="col-md-6">
-      <p>© 2016 - weconnec</p>
-    </div>
-    <div class="col-md-6">
-      <ul class="bottom_ul">
-        <li><a href="#">webenlance.com</a></li>
-        <li><a href="#">About us</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Faq's</a></li>
-        <li><a href="#">Contact us</a></li>
-        <li><a href="#">Site Map</a></li>
-      </ul>
-    </div>
-  </div>
-</div>
+    <footer>
+        <div class="container">
+            <p>Copyright &copy; Flask Inc.</p>
+        </div>
+    </footer>
     `
 });
 
@@ -122,17 +121,76 @@ const Home = Vue.component('home',{
                 <h3>Weconnec</h3>
                 <h2>Connecting students everywhere</h2>
                 <p> Accusantium quam, aliquam ultricies eget tempor id, aliquam eget nibh et. Maecen aliquam, risus at semper. Proin iaculis purus consequat sem cure digni ssim. Donec porttitora entum. </p>
-                <a href="#service" class="learn_more2">Learn more</a> </div>
+                <a href="#service" role="button" class="btn btn-primary">Learn more</a> 
+                
+<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
+  Register Now
+</button></div>
             </div>
             <div class="col-lg-7 col-sm-5"> </div>
           </div>
         </div>
+        
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Fill in the appropriate information to Register</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+  <form>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">First Name</label>
+      <input type="" class="form-control" id="inputEmail4" placeholder="">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Last Name</label>
+      <input type="" class="form-control" id="inputPassword4" placeholder="">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Email</label>
+      <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Username</label>
+      <input type="" class="form-control" id="inputPassword4" placeholder="">
+
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Password</label>
+      <input type="" class="form-control" id="inputEmail4" placeholder="Password">
+      <small id="passwordHelpBlock" class="form-text text-muted">
+  Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+</small>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Confirm Password</label>
+      <input type="password" class="form-control" id="inputPassword4" placeholder="Confirm Password">
+    </div>
+  </div>
+  
+  </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Register</button>
       </div>
     </div>
-    
+  </div>
+</div>
+
       </div>
-
-
+    </div>
+      </div>
 
 `,
   data: function(){
@@ -186,38 +244,6 @@ const Register = Vue.component('registration',{
       
       <div class="clear"></div>
     </div>
-
-
-
-<div class="card">
-<article class="card-body">
-  <h4 class="card-title text-center mb-4 mt-1">Sign in</h4>
-  <hr>
-  <p class="text-success text-center">Some message goes here</p>
-  <form>
-  <div class="form-group">
-  <div class="input-group">
-    <div class="input-group-prepend">
-        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
-     </div>
-    <input name="" class="form-control" placeholder="Email or login" type="email">
-  </div> <!-- input-group.// -->
-  </div> <!-- form-group// -->
-  <div class="form-group">
-  <div class="input-group">
-    <div class="input-group-prepend">
-        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
-     </div>
-      <input class="form-control" placeholder="******" type="password">
-  </div> <!-- input-group.// -->
-  </div> <!-- form-group// -->
-  <div class="form-group">
-  <button type="submit" class="btn btn-primary btn-block"> Login  </button>
-  </div> <!-- form-group// -->
-  <p class="text-center"><a href="#" class="btn">Forgot password?</a></p>
-  </form>
-</article>
-</div> <!-- card.// -->
 
 `,
   data: function(){
