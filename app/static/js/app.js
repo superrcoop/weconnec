@@ -40,7 +40,7 @@ Vue.component('app-header', {
               </div>
               <input class="form-control" type="Password" name="plain_password" v-model="plain_password" id="plain_password" placeholder="Password" >
             </div>
-              <button type="submit" class="btn btn-outline-light mb-2 mr-sm-0">Log in</button>
+              <button type="submit" class="btn btn-light mb-2 mr-sm-2">Log in</button>
           </form>
         
       </div>
@@ -211,31 +211,22 @@ const Description = Vue.component('description', {
 
 Vue.component('card', {
   template: `
-  <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-    <div class="card card-inverse card-info">
-    <a href=""><img class="card-img-top" src="http://2018.cedesc.com.br/assets/uploads/thumb-default.png"></a>
-    <div class="card-block">
-      <figure class="profile profile-inline">
-        <img src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif" class="profile-avatar" alt="">
-      </figure>
-      <h4 class="card-title">@{{username}}</h4>
+  <div class="card">
+    <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif"  alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">Card title</h5>
       <p><i class="fa fa-tags"></i> Tags: <a href=""><span class="badge badge-info">#waves</span></a> <a href=""><span class="badge badge-info">#CSS</span></a> <a href=""><span class="badge badge-info">#Vue.js</span></a></p>
-      <div class="card-text">
-          {{caption}}
-      </div>
-      </div>
-      <div class="card-footer">
-        <small>Posted: {{date_post}}</small>                  
-        <p v-if="this.username===this.user">
-        <button @click="delete_post" class="fas fa-trash-alt float-right"></button>
-        </p>
-      </div>
+      <p class="card-text">{{caption}} </p>
+      <p class="card-text"><small class="text-muted">Posted By: @{{username}} on {{date_post}}</small></p>
     </div>
+    <p v-if="this.username===this.user">
+      <button @click="delete_post" class="fas fa-trash-alt float-right"></button>
+    </p>
   </div>
   `,props:{
     id:String,
     username:String,
-    date_post:Date,
+    date_post:String,
     tags:String,
     caption:String,
     photo:String
@@ -290,8 +281,12 @@ Vue.component('card', {
 
 const Search =Vue.component('search', {
     template: `
-    <section class="download bg-primary text-center" id="download">
+    <section class="features" id="features">
       <div class="container">
+        <div class="section-heading text-center slideInLeft wow animated">
+          <h2>Search</h2>
+          <p >Ask a Question or search for a document by title or content..</p>
+        </div>
         <div class="row">
           <div class="col-md-8 mx-auto">
             <p class="alert alert-danger" role="alert" v-if="errors.length">
@@ -305,22 +300,17 @@ const Search =Vue.component('search', {
                 <li v-for="message in messages">{{ message }}</li>
               </ul>
             </p>
-            <h2 class="section-heading">Search</h2>
-            <p><p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p></p>
-            <input type="text" class="form-control" aria-label="Text input with segmented dropdown button" placeholder="Ask a question or search for a document or phrase/quote eg. What is a neural network? or How do fishes breathe? ">
-            <div class="input-group-append">
-              <button type="button" class="btn btn-outline-secondary">Search</button>
-              <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               <span class="sr-only">Toggle Dropdown</span> Advanced
-              </button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-                <div role="separator" class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Separated link</a>
-              </div>
-            </div>
+            <div id="custom-search-input" class=" fadeInUp animated">
+                <div class="input-group col-md-12 ">
+                    <input type="text" class="form-control input-lg" placeholder="search" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-lg" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+        </div><hr>
+          <div class="card-columns"><hr>
             <card  v-for="post in posts"
               v-bind:key="post.id"
               v-bind:title="post.title" 
@@ -329,6 +319,7 @@ const Search =Vue.component('search', {
               v-bind:photo="post.photo"
               v-bind:username="post.username">
             </card>
+            </div>
           </div>
         </div>
       </div>
@@ -336,7 +327,10 @@ const Search =Vue.component('search', {
         `,
   data:function(){
     return {
-      posts: [],
+      posts: [
+{ id: 1, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__'},
+      { id: 3, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} 
+     ],
       errors:[],
       messages:[]
     }
@@ -346,7 +340,7 @@ const Search =Vue.component('search', {
 
 const Home = Vue.component('home',{
   template:`
-
+  
   <header class="masthead">
       <div class="container h-100">
         <p class="alert alert-danger" role="alert" v-if="errors.length">
@@ -362,14 +356,16 @@ const Home = Vue.component('home',{
         </p>
 
         <div class="row h-100">
-          <div class="col-lg-7 my-auto flipInY wow animated">
-            <div class="header-content mx-auto ">
-              <h1 class="mb-5">'weconnec' is platform for students to gain access to a library of shared documents publicly or privately.</h1>
-              <router-link class="btn btn-outline-light " to="/description"> Learn More</router-link>
-              <button type="button" class="btn btn-outline btn-xl" data-toggle="modal" data-target="#exampleModalCenter">Register Now</button>
+          <div class="col-lg-7 my-auto">
+            <div class="header-content mx-auto  ">
+              <h1 class="mb-5 flipInY wow animated">'weconnec' is platform for students to gain access to a library of publicly or privately shared documents.</h1>
+              <router-link class="btn bounceInUp animated btn-outline-light " to="/description"> Learn More</router-link>
+              <button type="button" class="btn bounceInUp wow animated btn-outline btn-xl" data-toggle="modal" data-target="#exampleModalCenter">Register Now</button>
+            
             </div>
-          </div>
-          <div class="col-lg-5 my-auto">
+                          </div>
+
+          <div class="col-lg-5 my-auto fadeInRightBig wow animated">
             <div class="device-container">
               <div class="device-mockup macbook_2015 silver ">
                 <div class="device">
