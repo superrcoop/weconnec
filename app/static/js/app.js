@@ -1,6 +1,6 @@
 Vue.component('app-header', {
   template: `
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <nav class=" navbar-expand-lg fixed-top navbar navbar-dark" style="background-color: #222222;" id="mainNav">
       
         <p class="alert alert-danger" role="alert" v-if="errors.length">
           <b>Please correct the following error(s):</b>
@@ -147,14 +147,26 @@ const Description = Vue.component('description', {
     <section class="features" id="features">
       <div class="container">
         <div class="section-heading text-center">
-          <h2>Amazing Features</h2>
-          <p >Check out what you can do with this platform</p>
+          <h2 class="fadeInDown animated" >Documentation</h2>
+          <p class="fadeInRight animated">Weconnec intends to resolve the need for a central platform that allows, primarily students to 
+          share resources among themselves. Often times barriers impede how effective study resources are shared
+           among students. One such barrier is association.  Students may not know the right persons 
+           to be affiliated with in order to get helpful resources.  In addition, the project also seeks
+            to enhance how efficient students can manipulate study resources.  "WeConnec" is a web-based 
+            platform that grants users access to a library of documents as well as allow them to share documents 
+            with persons from their friend list after signing up for an account. Users have the option of making 
+            uploaded resources public or private. The platform's main function is to allow users to search through
+             a large pool of documents return relevant information based on the query in a timely manner. 
+             Another function that the project will implement is an answer search engine, this will allow users 
+             to pose a question after which a response, formulated from uploaded documents, will be returned. 
+             This response should have the correct answer for the question or if the engine could not find an 
+             appropriate answer it should suggest some resources that might contain the desired answer. </p>
           <hr>
         </div>
         <div class="row">
           <div class="col-lg-4 my-auto">
             <div class="device-container">
-              <div class="device-mockup ipad_pro portrait white">
+              <div class="device-mockup ipad_pro portrait white bounceInLeft animated">
                 <div class="device">
                   <div class="screen">
                     <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
@@ -168,17 +180,18 @@ const Description = Vue.component('description', {
             </div>
           </div>
           <div class="col-lg-8 my-auto">
-            <div class="container-fluid">
-              <div class="row">
+            <div class="container-fluid ">
+
+              <div class="row ">
                 <div class="col-lg-6">
-                  <div class="feature-item">
+                  <div class="feature-item slideInRight animated">
                   <i class="fas fa-mobile-alt"></i>
                     <h3>Mobile Friendly</h3>
                     <p >Ready to use HTML/CSS device mockups, no Photoshop required!</p>
                   </div>
                 </div>
                 <div class="col-lg-6">
-                  <div class="feature-item">
+                  <div class="feature-item slideInRight animated">
                     <i class="far fa-comments"></i>
                     <h3>Chat</h3>
                     <p >Put an image, video, animation, or anything else in the screen!</p>
@@ -187,14 +200,14 @@ const Description = Vue.component('description', {
               </div>
               <div class="row">
                 <div class="col-lg-6">
-                  <div class="feature-item">
+                  <div class="feature-item slideInRight animated">
                     <i class="fas fa-search"></i>
                     <h3>Refined Search</h3>
                     <p >As always, this theme is free to download and use for any purpose!</p>
                   </div>
                 </div>
                 <div class="col-lg-6">
-                  <div class="feature-item">
+                  <div class="feature-item slideInRight animated">
                     <i class="fas fa-graduation-cap"></i>
                     <h3>Huge library of resources</h3>
                     <p >Since this theme is MIT licensed, you can use it commercially!</p>
@@ -426,7 +439,7 @@ const Home = Vue.component('home',{
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Fill in the appropriate information to Register</h5>
+                <p class="modal-title text-muted" id="exampleModalLongTitle">Fill in the appropriate information to Register</p>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
