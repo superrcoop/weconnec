@@ -82,19 +82,18 @@ Vue.component('app-header', {
           self.errors.push(jsonResponse.errors);
         }else{
           console.log(jsonResponse.messages);
-          let token = jsonResponse.user_credentials[8];
-          let username=jsonResponse.user_credentials[3];
-          let location=jsonResponse.user_credentials[6];
-          let firstname=jsonResponse.user_credentials[4];
-          let lastname=jsonResponse.user_credentials[5];
-          let joined_on=jsonResponse.user_credentials[7];
-          let id=jsonResponse.user_credentials[9];
-          let posts=jsonResponse.user_credentials[0];
-          let following=jsonResponse.user_credentials[1];
-          let followers=jsonResponse.user_credentials[2];
+          self.messages.push(jsonResponse.messages);
+          let token = jsonResponse.userdata.token;
+          let username=jsonResponse.userdata.user_name;
+          let firstname=jsonResponse.userdata.first_name;
+          let lastname=jsonResponse.userdata.last_name;
+          let joined_on=jsonResponse.joined_on;
+          let id=jsonResponse.userdata.id;
+          let posts=jsonResponse.userdata.posts;
+          let following=jsonResponse.userdata.following;
+          let followers=jsonResponse.userdata.followers;
           localStorage.setItem('jwt_token', token);
           localStorage.setItem('username',username);
-          localStorage.setItem('location',location);
           localStorage.setItem('firstname',firstname);
           localStorage.setItem('lastname',lastname);
           localStorage.setItem('date_joined',joined_on);
@@ -102,7 +101,7 @@ Vue.component('app-header', {
           localStorage.setItem('post',posts);
           localStorage.setItem('following',following);
           localStorage.setItem('followers',followers);
-          window.location = "/dashboard";
+          self.$router.push('/profile');
         }   
       })
       .catch(function (error) {
@@ -506,7 +505,7 @@ const Home = Vue.component('home',{
   },
   methods: {
     checkForm:function(e) {
-      if(this.first_name && this.last_name && this.location && this.email && this.plain_password && this.conf_password){return true;} 
+      if(this.first_name && this.last_name && this.email && this.plain_password && this.conf_password){return true;} 
       this.errors = [];
       if(!this.first_name){this.errors.push("First name required.");}
       if(!this.last_name){this.errors.push("Last name required.");}
@@ -652,7 +651,8 @@ const router = new VueRouter({
     routes: [
     { path: "/", component: Home },
     { path: "/search", component: Search },
-    { path: "/description", component: Description }
+    { path: "/description", component: Description },
+    { path: "/profile", component:Profile}
     ]
 });
 
