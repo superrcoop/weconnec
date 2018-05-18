@@ -1,5 +1,4 @@
 import uuid , datetime , random , os ,errno
-from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from bcrypt import hashpw, gensalt ,checkpw
 from . import db ,UPLOAD_FOLDER
 from flask_login import UserMixin
@@ -38,12 +37,10 @@ class Users(db.Model,UserMixin):
     first_name = db.Column(db.String(80))
     last_name = db.Column(db.String(80))
     email= db.Column(db.String(80),unique=True,nullable=False)
-    location=db.Column(db.String(80))
     biography = db.Column(db.String(300)) 
     profile_photo=db.Column(db.String(80))
     joined_on = db.Column(db.Date,nullable=False)
     posts=db.relationship("Posts",backref='users')
-    userposts=db.relationship("Likes",backref='users')
     follows=db.relationship("Follows",backref='users')
 
     def __init__(self,user_name,plain_password,first_name,last_name,email,location):
@@ -53,12 +50,11 @@ class Users(db.Model,UserMixin):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
-        self.location=location
         self.profile_photo=generate_file_URI()
         self.joined_on=get_date()
     
     def is_correct_password(self, plain_password):
-		return checkpw(plain_password.encode('utf-8'),self.password.encode('utf-8'))
+        return checkpw(plain_password.encode('utf-8'),self.password.encode('utf-8'))
 
     def is_authenticated(self):
         return True
@@ -76,7 +72,7 @@ class Users(db.Model,UserMixin):
             return str(self.id)  # python 3 support
 
     def __repr__(self):
-		return '<Users %r>' % (self.username)
+        return '<Users %r>' % (self.username)
         
 class Posts(db.Model):
     __tablename__ = 'posts'
@@ -85,7 +81,6 @@ class Posts(db.Model):
     image_URI = db.Column(db.String(80))
     caption = db.Column(db.String(120))
     created_on =db.Column(db.Date,nullable=False)
-    likes=db.relationship("Likes",backref='posts')
 
     def __init__(self,user_id,caption,image_URI=None):
         self.id=get_newpost_id()
@@ -95,20 +90,7 @@ class Posts(db.Model):
         self.created_on=get_date()
 
     def __repr__(self):
-		return '<Posts %r>' % (self.id)
-
-
-class Likes(db.Model):
-    __tablename__ = 'likes'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer,db.ForeignKey('users.id'),nullable=False)
-    post_id = db.Column(db.String(10),db.ForeignKey('posts.id'),nullable=False)
-
-    def __init__(self,user_id,post_id):
-        id=get_newlike_id()
-        self.user_id=user_id
-        self.post_id=post_id
-
+        return '<Posts %r>' % (self.id)
 
 class Follows(db.Model):
     __tablename__ = 'follows'
