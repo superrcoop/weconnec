@@ -147,14 +147,14 @@ const Description = Vue.component('description', {
     <section class="features" id="features">
       <div class="container">
         <div class="section-heading text-center">
-          <h2>Unlimited Features, Unlimited Fun</h2>
-          <p class="text-muted">Check out what you can do with this app theme!</p>
+          <h2>Amazing Features</h2>
+          <p >Check out what you can do with this platform</p>
           <hr>
         </div>
         <div class="row">
           <div class="col-lg-4 my-auto">
             <div class="device-container">
-              <div class="device-mockup iphone6_plus portrait white">
+              <div class="device-mockup ipad_pro portrait white">
                 <div class="device">
                   <div class="screen">
                     <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
@@ -172,32 +172,32 @@ const Description = Vue.component('description', {
               <div class="row">
                 <div class="col-lg-6">
                   <div class="feature-item">
-                    <i class="icon-screen-smartphone text-primary"></i>
-                    <h3>Device Mockups</h3>
-                    <p class="text-muted">Ready to use HTML/CSS device mockups, no Photoshop required!</p>
+                  <i class="fas fa-mobile-alt"></i>
+                    <h3>Mobile Friendly</h3>
+                    <p >Ready to use HTML/CSS device mockups, no Photoshop required!</p>
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="feature-item">
-                    <i class="icon-camera text-primary"></i>
-                    <h3>Flexible Use</h3>
-                    <p class="text-muted">Put an image, video, animation, or anything else in the screen!</p>
+                    <i class="far fa-comments"></i>
+                    <h3>Chat</h3>
+                    <p >Put an image, video, animation, or anything else in the screen!</p>
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6">
                   <div class="feature-item">
-                    <i class="icon-present text-primary"></i>
-                    <h3>Free to Use</h3>
-                    <p class="text-muted">As always, this theme is free to download and use for any purpose!</p>
+                    <i class="fas fa-search"></i>
+                    <h3>Refined Search</h3>
+                    <p >As always, this theme is free to download and use for any purpose!</p>
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="feature-item">
-                    <i class="icon-lock-open text-primary"></i>
-                    <h3>Open Source</h3>
-                    <p class="text-muted">Since this theme is MIT licensed, you can use it commercially!</p>
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Huge library of resources</h3>
+                    <p >Since this theme is MIT licensed, you can use it commercially!</p>
                   </div>
                 </div>
               </div>
@@ -214,7 +214,7 @@ Vue.component('card', {
   <div class="card">
     <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif"  alt="Card image cap">
     <div class="card-body">
-      <h5 class="card-title">Card title</h5>
+      <h5 class="card-title">{{title}}</h5>
       <p><i class="fa fa-tags"></i> Tags: <a href=""><span class="badge badge-info">#waves</span></a> <a href=""><span class="badge badge-info">#CSS</span></a> <a href=""><span class="badge badge-info">#Vue.js</span></a></p>
       <p class="card-text">{{caption}} </p>
       <p class="card-text"><small class="text-muted">Posted By: @{{username}} on {{date_post}}</small></p>
@@ -225,6 +225,7 @@ Vue.component('card', {
   </div>
   `,props:{
     id:String,
+    title:String,
     username:String,
     date_post:String,
     tags:String,
@@ -300,16 +301,18 @@ const Search =Vue.component('search', {
                 <li v-for="message in messages">{{ message }}</li>
               </ul>
             </p>
+            <form  id="searchform" @submit.prevent="searchform" method="POST" enctype="multipart/form-data">
             <div id="custom-search-input" class=" fadeInUp animated">
                 <div class="input-group col-md-12 ">
-                    <input type="text" class="form-control input-lg" placeholder="search" />
+                <input class="form-control input-lg" type="text" name="search" v-model="search" id="search" placeholder="search" >
                     <span class="input-group-btn">
-                        <button class="btn btn-info btn-lg" type="button">
+                        <button class="btn btn-info btn-lg" type="submit">
                             <i class="fas fa-search"></i>
                         </button>
                     </span>
                 </div>
-        </div><hr>
+        </div>
+        </form><hr>
           <div class="card-columns"><hr>
             <card  v-for="post in posts"
               v-bind:key="post.id"
@@ -332,9 +335,47 @@ const Search =Vue.component('search', {
       { id: 3, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} 
      ],
       errors:[],
-      messages:[]
+      messages:[],
+      search:''
     }
-  }
+  },
+      
+    searchform: function () {
+        let self = this;
+        self.errors = [];
+        let form_data = new FormData();
+        if(self.search){form_data.append('search',self.search);}
+        fetch("/api/posts/new", { 
+        method: 'POST',
+        body: form_data,
+        headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('jwt_token'),
+                'X-CSRFToken': token
+            },
+        credentials: 'same-origin'
+        
+        })
+        .then(function (response) {
+          if (!response.ok) {
+throw Error(response.statusText);
+}
+            return response.json();
+        })
+        .then(function (jsonResponse) {
+             if(jsonResponse.errors) {
+        self.errors.push(jsonResponse.errors);
+      }else{
+        if(jsonResponse.messages) {
+        self.messages.push(jsonResponse.messages);
+      }
+        console.log(jsonResponse);
+      }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+    
 });
 
 
@@ -499,6 +540,99 @@ const Home = Vue.component('home',{
     }
 });
 
+
+const Profile = Vue.component('profile',{
+  template:`
+    <div class="container fadeIn animated">
+      <div class="row">
+        <div class="col-md-8">
+          <h1 class="my-4">Page Heading
+            <small>Secondary Text</small>
+          </h1>
+        <div class="col-md-4">
+          <div class="card my-4">
+            <h5 class="card-header">Search</h5>
+            <div class="card-body">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                  <button class="btn btn-secondary" type="button">Go!</button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="card my-4">
+            <h5 class="card-header">Categories</h5>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                  <ul class="list-unstyled mb-0">
+                    <li>
+                      <a href="#">Web Design</a>
+                    </li>
+                    <li>
+                      <a href="#">HTML</a>
+                    </li>
+                    <li>
+                      <a href="#">Freebies</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-6">
+                  <ul class="list-unstyled mb-0">
+                    <li>
+                      <a href="#">JavaScript</a>
+                    </li>
+                    <li>
+                      <a href="#">CSS</a>
+                    </li>
+                    <li>
+                      <a href="#">Tutorials</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card my-4">
+            <h5 class="card-header">Side Widget</h5>
+            <div class="card-body">
+              You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!
+            </div>
+          </div>
+          <div class="card-columns"><hr>
+            <card  v-for="post in posts"
+              v-bind:key="post.id"
+              v-bind:title="post.title" 
+              v-bind:caption="post.caption"
+              v-bind:date_post="post.date_post"
+              v-bind:photo="post.photo"
+              v-bind:username="post.username">
+            </card>
+            </div>
+            <ul class="pagination justify-content-center mb-4">
+            <li class="page-item">
+              <a class="page-link" href="#">&larr; Older</a>
+            </li>
+            <li class="page-item disabled">
+              <a class="page-link" href="#">Newer &rarr;</a>
+            </li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>`,
+    data:function(){
+    return {
+      posts: [
+{ id: 1, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__'},
+      { id: 3, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} 
+     ],
+      errors:[],
+      messages:[]
+    }
+  }
+});
 
 // Define Routes
 const router = new VueRouter({
