@@ -16,7 +16,6 @@ class RegistrationForm(FlaskForm):
 	email = StringField('Email Address', validators=[Email(message='Email not Valid'),DataRequired('Please provide an email address')])
 	plain_password = PasswordField('Enter Password',validators=[DataRequired('Enter a Password'),EqualTo('conf_password',message=('Passwords must Match'))])
 	conf_password=PasswordField('Repeat Password',validators=[DataRequired('Re-enter password')])
-	location = StringField('Location', validators = [DataRequired('Whats your location?')])
 
 class SearchForm(FlaskForm):
 	search=	StringField('Search', validators = [DataRequired('Search something...')])

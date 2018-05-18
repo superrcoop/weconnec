@@ -2,24 +2,25 @@
 {% block title %} <title>weconnec</title>{% endblock%}
 {% block main %}
 <div id="app">
-	 {% with messages = get_flashed_messages()
- 		%}
-   		{% if messages %}
-     <ul class="flashes">
-     {% for message in messages %}
-       <li>{{ message }}</li>
-     {% endfor %}
-     </ul>
-   {% endif %}
- 		{% endwith %}
+	{% with messages = get_flashed_messages()%}
+   	{% if messages %}
+    <ul class="flashes">
+    {% for message in messages %}
+        <li class="alert alert-dark" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+ 	{% endwith %}
     <app-header></app-header>
-
     <main>
-            <!-- component matched by the route will render here -->
-            <router-view></router-view>
+        <!-- component matched by the route will render here -->
+        <router-view></router-view>
     </main>
-    <search></search>
-
     <app-footer></app-footer>
 </div>
 {% endblock %}

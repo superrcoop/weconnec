@@ -56,33 +56,6 @@ def index():
 def load_user(id):
    return Users.query.get(int(id))
 
-
-@app.route('/api/posts/like', methods =['POST'])
-@login_required
-@requires_auth
-def like_post():
-    if request.method == 'POST':
-        
-        like=Likes(post_id,current_user.id)
-        db.session.add(like)
-        db.session.commit()   
-          
-        return jsonify(response= [{'messages':'Post successully liked'}])
-
-@app.route('/api/posts/unlike', methods =['POST'])
-@login_required
-@requires_auth
-def unlike_post():
-    if request.method == 'POST':
-        
-        like=Likes.query.filter_by(post_id=post_id).first();
-        db.session.delete(like)
-        db.session.commit()     
-        
-        return jsonify(response= [{'message':'Post unliked'}])
-
-
-
 @app.route('/api/auth/logout', methods = ['GET'])
 @login_required
 @requires_auth
