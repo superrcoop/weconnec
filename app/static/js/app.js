@@ -15,18 +15,14 @@ Vue.component('app-header', {
               <router-link class="nav-link js-scroll-trigger" to="/search"> Search </router-link>
             </li>
           </ul>
-          <form class="form-inline " id="loginform" @submit.prevent="loginform" method="POST" enctype="multipart/form-data">
+          <form class="form-inline " id="loginform" @submit.prevent="loginform" method="POST" enctype="multipart/form-data" novalidate="true">
             
             <div class="input-group mb-2 mr-sm-2 ">
               <div class="input-group-prepend">
                 <div class="input-group-text"><i class="fas fa-user"></i></div>
               </div>
-              <input class="form-control" type="text" name="username" v-model="username" id="username" placeholder="Username" >
-              <div class="invalid-feedback"  v-if="errors.length" v-for="error in errors">
-        
-            {{ error }}
-          
-        </div>
+              <input class="form-control " type="text" name="username" v-model="username" id="username" placeholder="Username" >
+              
             </div>
             <div class="input-group mb-2 mr-sm-2">
               <div class="input-group-prepend">
@@ -36,7 +32,12 @@ Vue.component('app-header', {
             </div>
               <button type="submit" class="btn btn-light mb-2 mr-sm-2">Log in</button>
           </form>
-        
+          <p class="alert alert-danger" role="alert" v-if="errors.length">
+              <b>Please correct the following error(s):</b>
+              <ul>
+                <li v-for="error in errors">{{ error }}</li>
+              </ul>
+            </p>
       </div>
     </nav>
     `,
@@ -51,10 +52,11 @@ Vue.component('app-header', {
   methods: {
     loginform:function(e) {
       e.preventDefault();
+      let self=this;
       this.errors = [];
       if(!this.username){this.errors.push("Name required.");}
       if(!this.plain_password){this.errors.push("Password required.");}
-      let self=this;
+      
       let loginForm = document.getElementById('loginform');
       let form_data = new FormData(loginForm);
       fetch('/api/auth/login', {
@@ -75,8 +77,8 @@ Vue.component('app-header', {
         if(jsonResponse.errors) {
           self.errors.push(jsonResponse.errors);
         }else{
+
           console.log(jsonResponse.messages);
-          self.messages.push(jsonResponse.messages);
           let token = jsonResponse.userdata.token;
           let username=jsonResponse.userdata.user_name;
           let firstname=jsonResponse.userdata.first_name;

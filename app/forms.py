@@ -7,7 +7,7 @@ from flask_wtf.file import FileField, FileAllowed, FileRequired
 class LoginForm(FlaskForm):
 
 	username = StringField('Username', validators = [DataRequired('Please provide an email address')])
-	plain_password = PasswordField('Password', validators = [DataRequired()])
+	plain_password = PasswordField('Password', validators = [DataRequired('Enter your password')])
 
 class RegistrationForm(FlaskForm):
 	first_name = StringField('First Name', validators=[Length(min=1,max=40,message=('First Name does not satisfy condition ( 1 < name.length <= 40 )')),DataRequired('Please provide a First Name')])

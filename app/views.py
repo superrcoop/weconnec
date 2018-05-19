@@ -88,7 +88,7 @@ def login():
                         'token':token,
                         'id':current_user.id
                         }
-            return jsonify({'user_credentials': userdata, 'messages':"Token Generated"})
+            return jsonify({'userdata': userdata, 'messages':"Token Generated"})
         else:
             error = "Invalid email and/or password"
             return jsonify({'errors': error})
