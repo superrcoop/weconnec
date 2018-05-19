@@ -118,12 +118,8 @@ def register():
     else:
         return jsonify({'errors':form_errors(form)})
 
-""" A P I
 
-
-
-
-@app.route('/api/posts/new', methods = ['POST'])
+@app.route('/api/uploads/new', methods = ['POST'])
 @login_required
 @requires_auth
 def newPost():
@@ -155,12 +151,12 @@ def newPost():
         return jsonify({'errors':form_errors(form)})
 
 
-@app.route('/api/posts/all', methods = ['GET'])
+@app.route('/api/uploads/all', methods = ['GET'])
 @login_required
 def get_all_posts():
     error=None
     if request.method =='GET':
-        posts=Posts.query.order_by(Posts.created_on.desc()).all()
+        #posts=Posts.query.order_by(Posts.created_on.desc()).all() ----> [by user]
         listposts=[]
         liked=False
         for i in range (0,len(posts)):
@@ -184,7 +180,7 @@ def get_all_posts():
     else:
         return jsonify({'errors':error})
 
-@app.route('/api/posts/delete', methods = ['GET','POST'])
+@app.route('/api/uploads/delete', methods = ['GET','POST'])
 @login_required
 def delete_post():
     error=None
@@ -200,6 +196,9 @@ def delete_post():
         return jsonify({'messages':'Post received'})
     else:
         return jsonify({'errors':error})
+
+
+""" A P I
 
 @app.route('/api/users/<username>', methods = ['GET'])
 @login_required

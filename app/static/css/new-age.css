@@ -78,6 +78,7 @@ section h2 {
   font-family: 'Damion', cursive;
   font-weight: 200;
   letter-spacing: 1px;
+  font-size: 25px;
 }
 
 #mainNav .navbar-brand:hover, #mainNav .navbar-brand:focus {
@@ -154,30 +155,6 @@ header.masthead .device-container .screen img {
 }
 
 
-
-section.download {
-  background: #DCDCDC;
-  position: relative;
-  padding: 150px 0;
-}
-
-section.download h2 {
-  font-size: 50px;
-  margin-top: 0;
-}
-
-section.download .badges .badge-link {
-  display: block;
-  margin-bottom: 25px;
-}
-
-section.download .badges .badge-link:last-child {
-  margin-bottom: 0;
-}
-
-section.download .badges .badge-link img {
-  height: 60px;
-}
 
 section.features {
   position: relative;

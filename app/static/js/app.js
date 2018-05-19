@@ -16,7 +16,6 @@ Vue.component('app-header', {
             </li>
           </ul>
           <form class="form-inline " id="loginform" @submit.prevent="loginform" method="POST" enctype="multipart/form-data" novalidate="true">
-            
             <div class="input-group mb-2 mr-sm-2 ">
               <div class="input-group-prepend">
                 <div class="input-group-text"><i class="fas fa-user"></i></div>
@@ -77,7 +76,6 @@ Vue.component('app-header', {
         if(jsonResponse.errors) {
           self.errors.push(jsonResponse.errors);
         }else{
-
           console.log(jsonResponse.messages);
           let token = jsonResponse.userdata.token;
           let username=jsonResponse.userdata.user_name;
@@ -97,6 +95,7 @@ Vue.component('app-header', {
           localStorage.setItem('post',posts);
           localStorage.setItem('following',following);
           localStorage.setItem('followers',followers);
+          document.getElementById("loginform").reset();
           self.$router.push('/profile');
         }   
       })
@@ -162,7 +161,6 @@ Vue.component('app-footer', {
             </div>
           </li>
           <li class="list-inline-item">
-            <a href="#"></a>
             <a href="#privacy-modal" data-toggle="modal">Privacy Policy</a>
             <div class="modal fade" id="privacy-modal" tabindex="-1" role="dialog" aria-labelledby="title-privacy" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
@@ -184,7 +182,24 @@ Vue.component('app-footer', {
               </div>
             </div>
           </li>
-          
+          <li class="list-inline-item">
+            <a href="#terms-modal" data-toggle="modal">Terms of use</a>
+            <div class="modal fade" id="terms-modal" tabindex="-1" role="dialog" aria-labelledby="title-terms" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-terms">Terms of Use</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                    Note: Our Terms of Use are changing.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
           <li class="list-inline-item">
             <a href="#faq-modal" data-toggle="modal">FAQ</a>
             <div class="modal fade" id="faq-modal" tabindex="-1" role="dialog" aria-labelledby="title-faq" aria-hidden="true">
@@ -266,18 +281,17 @@ Vue.component('app-footer', {
 
 Vue.component('card', {
   template: `
-  <div class="card">
-    <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif"  alt="Card image cap">
-    <div class="card-body">
-      <h5 class="card-title">{{title}}</h5>
-      <p><i class="fa fa-tags"></i> Tags: <a href=""><span class="badge badge-info">#waves</span></a> <a href=""><span class="badge badge-info">#CSS</span></a> <a href=""><span class="badge badge-info">#Vue.js</span></a></p>
-      <p class="card-text">{{caption}} </p>
-      <p class="card-text"><small class="text-muted">Posted By: @{{username}} on {{date_post}}</small></p>
-    </div>
-    <p v-if="this.username===this.user">
+  <div class="card mb-3">
+  <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif"  alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{title}}</h5>
+    <p><i class="fa fa-tags"></i> Tags: <a href=""><span class="badge badge-info">#waves</span></a> <a href=""><span class="badge badge-info">#CSS</span></a> <a href=""><span class="badge badge-info">#Vue.js</span></a></p>
+    <p class="card-text">{{caption}}</p>
+    <p class="card-text"><small class="text-muted">Posted By: @{{username}} on {{date_post}}</small><p v-if="this.username===this.user">
       <button @click="delete_post" class="fas fa-trash-alt float-right"></button>
-    </p>
+    </p></p>
   </div>
+</div>
   `,props:{
     id:String,
     title:String,
@@ -597,64 +611,29 @@ const Home = Vue.component('home',{
 
 const Profile = Vue.component('profile',{
   template:`
+  <section>
     <div class="container fadeIn animated">
+    <div class="container">
       <div class="row">
-        <div class="col-md-8">
-          <h1 class="my-4">Page Heading
-            <small>Secondary Text</small>
-          </h1>
         <div class="col-md-4">
           <div class="card my-4">
-            <h5 class="card-header">Search</h5>
+            <h5 class="card-header">Profile</h5>
             <div class="card-body">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-secondary" type="button">Go!</button>
-                </span>
-              </div>
+              <p>Profile preview</p>
             </div>
           </div>
           <div class="card my-4">
-            <h5 class="card-header">Categories</h5>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-lg-6">
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="#">Web Design</a>
-                    </li>
-                    <li>
-                      <a href="#">HTML</a>
-                    </li>
-                    <li>
-                      <a href="#">Freebies</a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-lg-6">
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="#">JavaScript</a>
-                    </li>
-                    <li>
-                      <a href="#">CSS</a>
-                    </li>
-                    <li>
-                      <a href="#">Tutorials</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card my-4">
-            <h5 class="card-header">Side Widget</h5>
+            <h5 class="card-header">More options</h5>
             <div class="card-body">
               You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!
             </div>
           </div>
-          <div class="card-columns"><hr>
+        </div>
+        <div class="col-md-8">
+          <h1>Resources</h1><a href="#upload-modal" data-toggle="modal">Upload new</a>
+          <hr>
+          
+          <div class="card-columns">
             <card  v-for="post in posts"
               v-bind:key="post.id"
               v-bind:title="post.title" 
@@ -663,8 +642,9 @@ const Profile = Vue.component('profile',{
               v-bind:photo="post.photo"
               v-bind:username="post.username">
             </card>
-            </div>
-            <ul class="pagination justify-content-center mb-4">
+          </div>
+
+          <ul class="pagination justify-content-center mb-4">
             <li class="page-item">
               <a class="page-link" href="#">&larr; Older</a>
             </li>
@@ -673,9 +653,53 @@ const Profile = Vue.component('profile',{
             </li>
           </ul>
         </div>
-        </div>
       </div>
-    </div>`,
+
+    </div>
+    </div>
+    <div class="modal fade" id="upload-modal" tabindex="-1" role="dialog" aria-labelledby="title-upload" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-upload">Upload</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p v-if="errors.length">
+                      <b>Please correct the following error(s):</b>
+                      <ul>
+                        <li v-for="error in errors">{{ error }}</li>
+                      </ul>
+                      </p>
+                       <p class="alert alert-success" role="alert" v-if="messages.length">
+                      <ul>
+                        <li v-for="message in messages">{{ message }}</li>
+                      </ul>
+                    </p>
+                    <form id="uploadForm"  @submit.prevent="uploadPost" method="POST" enctype="multipart/form-data">
+                      <label class="input-group" for="file">Upload file</label>
+                      <input ref="fileInput" style="display:none" v-on:change="onSelectedFile" class="form-control" id="file"  type="file" :name="file"/>
+                      <br>
+                      <a class="btn btn-secondary" @click="$refs.fileInput.click()">Select file</a>
+                      <br>
+                      <label class="input-group" for="description">Description</label>
+                      <textarea class="form-control" rows="3"  v-model="description" placeholder="Write a description..." id="description" name="description"></textarea>
+                      <br>
+                      <label class="input-group" for="tags">Tags</label>
+                      <textarea class="form-control" rows="2"  v-model="tags" placeholder="Add tags (optional)" id="tags" name="tags"></textarea><br>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="sumbit" class="btn btn-warning" >Upload</button>
+                      </div>
+                    </form>
+    
+                  </div>
+                </div>
+              </div>
+            </div>
+    </section>`,
     data:function(){
     return {
       posts: [
@@ -683,9 +707,92 @@ const Profile = Vue.component('profile',{
       { id: 3, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} 
      ],
       errors:[],
-      messages:[]
+      messages:[],
+      description:'',
+      tags:'',
+      file:null
     }
   }
+  ,
+ created: function () {
+            let self = this;
+            if(localStorage.getItem('jwt_token')!==null){
+                fetch("/api/posts/all", { 
+                method: 'GET',
+                headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('jwt_token'),
+                        'X-CSRFToken': token
+                    },
+                credentials: 'same-origin'
+                
+                })
+                .then(function (response) {
+                if (!response.ok) {
+          throw Error(response.statusText);
+
+               };
+              return response.json();
+        })
+        .then(function (jsonResponse) {
+          if(jsonResponse.errors) {
+            self.errors.push(jsonResponse.errors);
+          }else{
+                    self.posts=jsonResponse.posts;
+                    console.log(self.posts);
+                  }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
+        },methods: {
+
+      onSelectedFile: function(event){
+        let self=this;
+        self.file=event.target.files[0];
+      },
+      
+        uploadPost: function () {
+            let self = this;
+            self.errors = [];
+            let form_data = new FormData();
+
+          if(self.file){form_data.append('files',self.file);}
+        if(self.tags){form_data.append('tags',self.tags);}
+        
+        
+        form_data.append('description',self.description);
+            fetch("/api/uploads/new", { 
+            method: 'POST',
+            body: form_data,
+            headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwt_token'),
+                    'X-CSRFToken': token
+                },
+            credentials: 'same-origin'
+            
+            })
+            .then(function (response) {
+              if (!response.ok) {
+    throw Error(response.statusText);
+  }
+                return response.json();
+            })
+            .then(function (jsonResponse) {
+                 if(jsonResponse.errors) {
+            self.errors.push(jsonResponse.errors);
+          }else{
+            if(jsonResponse.messages) {
+            self.messages.push(jsonResponse.messages);
+          }
+            console.log(jsonResponse);
+          }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
+    }
 });
 
 // Define Routes
