@@ -4,7 +4,7 @@ create database weconnec;
 
 drop table if exists users;
 create table users(
-	user_id int,
+	id int,
 	username varchar(80),
 	password varchar(255),
 	firstname varchar(80),
@@ -18,9 +18,9 @@ create table users(
 
 drop table if exists posts;
 create table posts(
-	post_id varchar(80),
+	id varchar(80),
 	user_id int,
-	photo varchar(80),
+	image_URI varchar(80),
 	caption varchar(120),
 	created_on date,
 	primary key (post_id),
@@ -30,7 +30,7 @@ create table posts(
 
 drop table if exists follows;
 create table follows(
-	follows_id int,
+	id int,
 	user_id int,
 	follower_id int,
 	primary key (follows_id),

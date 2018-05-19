@@ -107,9 +107,8 @@ def register():
         first_name = form.first_name.data
         last_name = form.last_name.data
         email = form.email.data
-        location = form.location.data
         if not Users.query.filter_by(email = email).first() and not Users.query.filter_by(user_name = username).first():
-            user = Users(user_name = username, first_name = first_name, last_name = last_name, email = email, plain_password = plain_password,location=location)
+            user = Users(user_name = username, first_name = first_name, last_name = last_name, email = email, plain_password = plain_password)
             db.session.add(user)
             db.session.commit()
             return jsonify({'messages':'You have successfully registered'})

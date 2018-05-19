@@ -396,20 +396,9 @@ const Home = Vue.component('home',{
   
   <header class="masthead">
       <div class="container h-100">
-        <p class="alert alert-danger" role="alert" v-if="errors.length">
-          <b>Please correct the following error(s):</b>
-          <ul>
-            <li v-for="error in errors">{{ error }}</li>
-          </ul>
-        </p>
-        <p class="alert alert-success" role="alert" v-if="messages.length">
-          <ul>
-            <li v-for="message in messages">{{ message }}</li>
-          </ul>
-        </p>
-
         <div class="row h-100">
           <div class="col-lg-7 my-auto">
+          
             <div class="header-content mx-auto  ">
               <h1 class="mb-5 flipInY wow animated">'weconnec' is platform for students to gain access to a library of publicly or privately shared documents.</h1>
               <router-link class="btn bounceInUp animated btn-outline-light " to="/description"> Learn More</router-link>
@@ -437,54 +426,65 @@ const Home = Vue.component('home',{
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
+
               <div class="modal-header">
                 <p class="modal-title text-muted" id="exampleModalLongTitle">Fill in the appropriate information to Register</p>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
-          <form id="registerform" @submit.prevent="registerform" method="POST" enctype="multipart/form-data" novalidate="true">
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="first_name">First Name</label>
-              <input class="form-control" type="text" name="first_name" v-model="first_name" id="fname" placeholder="First Name" >
+            <div class="modal-body">
+            <p class="alert alert-success" role="alert" v-if="messages.length">
+              <ul>
+                <li v-for="message in messages">{{ message }}</li>
+              </ul>
+            </p>
+            <p class="alert alert-danger" role="alert" v-if="errors.length">
+              <b>Please correct the following error(s):</b>
+              <ul>
+                <li v-for="error in errors">{{ error }}</li>
+              </ul>
+            </p>
+            
+            <form id="registerform" @submit.prevent="registerform" method="POST" enctype="multipart/form-data" novalidate="true">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="first_name">First Name</label>
+                <input class="form-control" type="text" name="first_name" v-model="first_name" id="fname" placeholder="First Name" >
+              </div>
+              <div class="form-group col-md-6">
+                <label for="last_name">Last Name</label>
+                <input class="form-control" type="text" name="last_name" v-model="last_name" id="lname" placeholder="Last Name">
+              </div>
             </div>
-            <div class="form-group col-md-6">
-              <label for="last_name">Last Name</label>
-              <input class="form-control" type="text" name="last_name" v-model="last_name" id="lname" placeholder="Last Name">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="email">Email</label>
+                <input class="form-control" type="email" name="email" v-model="email" id="email" placeholder="Email" >
+              </div>
+              <div class="form-group col-md-6">
+                <label for="username">Username</label>
+                <input class="form-control" type="text" name="username" v-model="username" id="username" placeholder="Username" >
+              </div>
             </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="email">Email</label>
-              <input class="form-control" type="email" name="email" v-model="email" id="email" placeholder="Email" >
-            </div>
-            <div class="form-group col-md-6">
-              <label for="username">Username</label>
-              <input class="form-control" type="text" name="username" v-model="username" id="username" placeholder="Username" >
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="plain_password">Password</label>
-              <input class="form-control" type="Password" name="plain_password" v-model="plain_password" id="plain_password" placeholder="Password" >
-              <small id="passwordHelpBlock" class="form-text text-muted">
-          Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
-        </small>
-            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="plain_password">Password</label>
+                <input class="form-control" type="Password" name="plain_password" v-model="plain_password" id="plain_password" placeholder="Password" >
+                <small id="passwordHelpBlock" class="form-text text-muted">Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.</small>
+              </div>
             <div class="form-group col-md-6">
               <label for="conf_password">Confirm Password</label>
               <input class="form-control" type="password" name="conf_password" v-model="conf_password" id="conf_password" placeholder="Confirm Password" >
             </div>
           </div>
-          
-          </form>
+          <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="sumbit" class="btn btn-primary" >Register</button>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="sumbit" class="btn btn-primary">Register</button>
-              </div>
+              </form>
+        </div>
+              
             </div>
           </div>
         </div>
@@ -540,9 +540,8 @@ const Home = Vue.component('home',{
             console.log(jsonResponse.errors);
             self.errors.push(jsonResponse.errors);
           }else{
-            console.log(jsonResponse.data);
-            console.log(jsonResponse.message); 
-            self.$router.push('/login');
+            console.log(jsonResponse.messages); 
+            self.messages.push(jsonResponse.messages);
           }; 
         })
         .catch(function (error) {

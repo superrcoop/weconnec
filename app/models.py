@@ -18,9 +18,9 @@ def get_date():
 
 def generate_file_URI(post_id=None):
     if post_id:      
-        URI=UPLOAD_FOLDER+'/posts/'
+        URI=UPLOAD_FOLDER+'/posts/'+str(uuid.uuid4().get_hex()[0:6])+'/'
     else:
-        URI=UPLOAD_FOLDER+'/prof_photo/'+str(uuid.uuid4().get_hex()[0:12])+'/'
+        URI=UPLOAD_FOLDER+'/prof_photo/'+str(uuid.uuid4().get_hex()[0:9])+'/'
     if not os.path.exists(URI):
         try:
             os.makedirs(URI)
@@ -43,7 +43,7 @@ class Users(db.Model,UserMixin):
     posts=db.relationship("Posts",backref='users')
     follows=db.relationship("Follows",backref='users')
 
-    def __init__(self,user_name,plain_password,first_name,last_name,email,location):
+    def __init__(self,user_name,plain_password,first_name,last_name,email):
         self.id=get_new_id()
         self.user_name = user_name
         self.password = hashpw(plain_password.encode('utf-8'),gensalt())
