@@ -2,17 +2,6 @@ Vue.component('app-header', {
   template: `
     <nav class=" navbar-expand-lg fixed-top navbar navbar-dark" style="background-color: #222222;" id="mainNav">
       
-        <p class="alert alert-danger" role="alert" v-if="errors.length">
-          <b>Please correct the following error(s):</b>
-          <ul>
-            <li v-for="error in errors">{{ error }}</li>
-          </ul>
-        </p>
-        <p class="alert alert-success" role="alert" v-if="messages.length">
-          <ul>
-            <li v-for="message in messages">{{ message }}</li>
-          </ul>
-        </p>
         <router-link class="navbar-brand js-scroll-trigger" to="/">weconnec </router-link>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <i class="fas fa-bars"></i>
@@ -33,6 +22,11 @@ Vue.component('app-header', {
                 <div class="input-group-text"><i class="fas fa-user"></i></div>
               </div>
               <input class="form-control" type="text" name="username" v-model="username" id="username" placeholder="Username" >
+              <div class="invalid-feedback"  v-if="errors.length" v-for="error in errors">
+        
+            {{ error }}
+          
+        </div>
             </div>
             <div class="input-group mb-2 mr-sm-2">
               <div class="input-group-prepend">
