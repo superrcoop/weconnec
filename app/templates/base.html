@@ -20,8 +20,8 @@
     {% block css %} {% endblock%}
   </head>
   <body>
-    
     <div id="main">
+
 
         {% block main %}{% endblock %}
     </div>
@@ -40,28 +40,10 @@
     $(document).ready(function() {
 
         "use strict";
-        $(window).load(function () {
+        $(window).on('load',function () {
             $(".loaded").fadeOut();
-            $(".preloader").delay(1500).fadeOut("slow");
+            $(".preloader").delay(100).fadeOut("slow");
         }); 
-        /*---------------------------------------------*
-         * Mobile menu
-         ---------------------------------------------*/
-        $('.navbar-collapse').find('a[href*=#]:not([href=#])').click(function () {
-            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-                var target = $(this.hash);
-                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-                if (target.length) {
-                    $('html,body').animate({
-                     scrollTop: (target.offset().top - 40)
-                    }, 1000);
-                    if ($('.navbar-toggle').css('display') != 'none') {
-                        $(this).parents('.container').find(".navbar-toggle").trigger("click");
-                    }
-                    return false;
-                }
-            }
-        });
         /*-- =============================================== -->
         <!-- ========== bootstrap scrollspy ========== -->
         <!-- =============================================== --> */    
@@ -101,24 +83,6 @@
             }, 1500, 'easeInOutExpo');
             event.preventDefault();
         });
-    });
-    //<!-- =============================================== -->
-    //<!-- ========== Navbar ========== -->
-    //<!-- =============================================== -->
-    jQuery(window).scroll(function () {
-        var top = jQuery(document).scrollTop();
-        var batas = 800;
-        var logo = 'images/logo.png';
-        var logoScroll = 'images/logo2.png';
-        //alert(batas); 
-        if (top > batas) {
-            jQuery('.main-menu').addClass('tiny');
-            jQuery('.main-menu').css('opacity','1');
-            jQuery('.navbar-brand img').attr('src',logoScroll);
-        } else {
-            jQuery('.main-menu').removeClass('tiny'); 
-            jQuery('.navbar-brand img').attr('src',logo);
-        }
     });
     </script>
     {% block js %} {% endblock%}

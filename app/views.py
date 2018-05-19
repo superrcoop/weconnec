@@ -1,7 +1,9 @@
-from app import app
+from app import app, db, login_manager 
 from flask import render_template, request, session, redirect, url_for ,jsonify,g,_request_ctx_stack,flash
 from controllers import form_errors 
 from forms import LoginForm, RegistrationForm, SearchForm
+from flask_login import login_user, logout_user, current_user, login_required
+from models import Users, Posts, Follows
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import CombinedMultiDict
 import jwt ,os ,json
@@ -47,11 +49,6 @@ def index():
     """Render website's initial page and let VueJS take over."""
     return render_template('index.html')
 
-
-
-""" A P I
-
-
 @login_manager.user_loader
 def load_user(id):
    return Users.query.get(int(id))
@@ -63,6 +60,68 @@ def userLogout():
     g.current_user = None
     logout_user()
     return jsonify({'messages':'You have successfully logged out'})    
+
+
+@app.route('/api/auth/login', methods = ['POST'])
+def login():
+    error=None
+    form = LoginForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        username = form.username.data
+        plain_password = form.plain_password.data
+        user = Users.query.filter_by(user_name = username).first()
+        if user and user.is_correct_password(plain_password): 
+            login_user(user)
+            payload = {'id': current_user.id, 'username': current_user.user_name}
+            token = jwt.encode(payload, app.config['TOKEN_SECRET'], algorithm='HS256') 
+            post=Posts.query.filter_by(user_id=user.id).all();
+            following=Follows.query.filter_by(user_id=user.id).all();
+            followers=Follows.query.filter_by(follower_id=user.id).all();
+            userdata = {
+                        'posts':len(post),
+                        'following':len(following),
+                        'followers':len(followers),
+                        'user_name':current_user.user_name,
+                        'first_name':current_user.first_name,
+                        'last_name':current_user.last_name,
+                        'joined_on':current_user.joined_on,
+                        'token':token,
+                        'id':current_user.id
+                        }
+            return jsonify({'userdata': userdata, 'messages':"Token Generated"})
+        else:
+            error = "Invalid email and/or password"
+            return jsonify({'errors': error})
+    else:
+        return jsonify({'errors':form_errors(form)}) 
+
+
+@app.route('/api/users/register', methods = ['POST'])
+def register():
+    error=None
+    form = RegistrationForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        username = form.username.data
+        plain_password = form.plain_password.data
+        conf_password = form.conf_password.data
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+        email = form.email.data
+        if not Users.query.filter_by(email = email).first() and not Users.query.filter_by(user_name = username).first():
+            user = Users(user_name = username, first_name = first_name, last_name = last_name, email = email, plain_password = plain_password)
+            db.session.add(user)
+            db.session.commit()
+            return jsonify({'messages':'You have successfully registered'})
+        else:
+            error = "Email and/or username already exists"
+            return jsonify({'errors': error})
+    else:
+        return jsonify({'errors':form_errors(form)})
+
+""" A P I
+
+
+
 
 @app.route('/api/posts/new', methods = ['POST'])
 @login_required
@@ -236,51 +295,7 @@ def unfollow_user(username):
         #unfollow da bitch
         return jsonify({'messages':'Unfollowing '+user.username})
 
-@app.route('/api/users/register', methods = ['POST'])
-def register():
-    error=None
-    form = RegistrationForm()
-    if request.method == 'POST' and form.validate_on_submit():
-        username = form.username.data
-        plain_password = form.plain_password.data
-        conf_password = form.conf_password.data
-        first_name = form.first_name.data
-        last_name = form.last_name.data
-        email = form.email.data
-        location = form.location.data
-        if not Users.query.filter_by(email = email).first() and not Users.query.filter_by(user_name = username).first():
-            user = Users(user_name = username, first_name = first_name, last_name = last_name, email = email, plain_password = plain_password,location=location)
-            db.session.add(user)
-            db.session.commit()
-            return jsonify({'messages':'You have successfully registered'})
-        else:
-            error = "Email and/or username already exists"
-            return jsonify({'errors': error})
-    else:
-        return jsonify({'errors':form_errors(form)})
 
-@app.route('/api/auth/login', methods = ['POST'])
-def login():
-    error=None
-    form = LoginForm()
-    if request.method == 'POST' and form.validate_on_submit():
-        username = form.username.data
-        plain_password = form.plain_password.data
-        user = Users.query.filter_by(user_name = username).first()
-        if user and user.is_correct_password(plain_password): 
-            login_user(user)
-            payload = {'id': current_user.id, 'username': current_user.user_name}
-            token = jwt.encode(payload, app.config['TOKEN_SECRET'], algorithm='HS256') 
-            post=Posts.query.filter_by(user_id=user.id).all();
-            following=Follows.query.filter_by(user_id=user.id).all();
-            followers=Follows.query.filter_by(follower_id=user.id).all();
-            userdata = [len(post),len(following),len(followers),current_user.user_name,current_user.first_name,current_user.last_name,current_user.location,current_user.joined_on,token,current_user.id]
-            return jsonify({'user_credentials': userdata, 'messages':"Token Generated"})
-        else:
-            error = "Invalid email and/or password"
-            return jsonify({'errors': error})
-    else:
-        return jsonify({'errors':form_errors(form)}) 
 
 """
 @app.route('/<file_name>.txt')
