@@ -30,7 +30,7 @@ Vue.component('app-header', {
               </div>
               <input class="form-control" type="Password" name="plain_password" v-model="plain_password" id="plain_password" placeholder="Password" >
             </div>
-              <button type="submit" class="btn btn-light mb-2 mr-sm-2">Log in</button>
+              <button type="submit" class="btn mb-2 mr-sm-2">Log in</button>
           </form>
           <p class="alert alert-danger" role="alert" v-if="errors.length">
               <b>Please correct the following error(s):</b>
@@ -114,22 +114,148 @@ Vue.component('app-footer', {
         <p>&copy; weconnec 2018. All Rights Reserved.</p>
         <ul class="list-inline">
           <li class="list-inline-item">
-            <a href="#">Account</a>
+            <a href="#about-modal" data-toggle="modal">About</a>
+            <div class="modal fade" id="about-modal" tabindex="-1" role="dialog" aria-labelledby="title-about" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-about">About</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                   Weconnec intends to resolve the need for a central platform that allows, primarily students to 
+                  share resources among themselves. Often times barriers impede how effective study resources are shared
+                   among students. One such barrier is association.  Students may not know the right persons 
+                   to be affiliated with in order to get helpful resources.  In addition, the project also seeks
+                    to enhance how efficient students can manipulate study resources.  "WeConnec" is a web-based 
+                    platform that grants users access to a library of documents as well as allow them to share documents 
+                    with persons from their friend list after signing up for an account. Users have the option of making 
+                    uploaded resources public or private. The platform's main function is to allow users to search through
+                     a large pool of documents return relevant information based on the query in a timely manner. 
+                     Another function that the project will implement is an answer search engine, this will allow users 
+                     to pose a question after which a response, formulated from uploaded documents, will be returned. 
+                     This response should have the correct answer for the question or if the engine could not find an 
+                     appropriate answer it should suggest some resources that might contain the desired answer. 
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
           <li class="list-inline-item">
-            <a href="#">About</a>
+            <a href="#account-modal" data-toggle="modal">Account</a>
+            <div class="modal fade" id="account-modal" tabindex="-1" role="dialog" aria-labelledby="title-account" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-account">Account Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                    You need to sign in before you can view account information
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
           <li class="list-inline-item">
-            <a href="#">Privacy &amp; Terms</a>
+            <a href="#"></a>
+            <a href="#privacy-modal" data-toggle="modal">Privacy Policy</a>
+            <div class="modal fade" id="privacy-modal" tabindex="-1" role="dialog" aria-labelledby="title-privacy" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-privacy">Privacy Policy</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                    Effective date: May 19, 2018
+                      weconnec ("us", "we", or "our") operates the weconnec.xyz website (the "Service").
+                      This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data. This Privacy Policy for weconnec is powered by TermsFeed.
+                      We use your data to provide and improve the Service. By using the Service, you agree to the collection and use of information in accordance with this policy. Unless otherwise defined in this Privacy Policy, terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, accessible from weconnec.xyz
+                      
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          
+          <li class="list-inline-item">
+            <a href="#faq-modal" data-toggle="modal">FAQ</a>
+            <div class="modal fade" id="faq-modal" tabindex="-1" role="dialog" aria-labelledby="title-faq" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-faq">FAQ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                    Frequently asked question
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
           <li class="list-inline-item">
-            <a href="#">Help</a>
+            <a href="#help-modal" data-toggle="modal">Help</a>
+            <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="title-help" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-help">Help</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                    How to use ?
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
           <li class="list-inline-item">
-            <a href="#">FAQ</a>
+            <a href="#contact-us" data-toggle="modal">Contact us</a>
+            <div class="modal fade" id="contact-us" tabindex="-1" role="dialog" aria-labelledby="title-contact" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-contact">Contact us</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                    contact form goes here
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
           <li class="list-inline-item">
-            <a href="#">More</a>
+            <a href="#more" data-toggle="modal">More</a>
+            <div class="modal fade" id="more" tabindex="-1" role="dialog" aria-labelledby="title-more" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-more">More Options</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                    More options
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
         </ul>
       </div>
@@ -137,85 +263,6 @@ Vue.component('app-footer', {
     `
 });
 
-const Description = Vue.component('description', {
-  template: `
-    <section class="features" id="features">
-      <div class="container">
-        <div class="section-heading text-center">
-          <h2 class="fadeInDown animated" >Documentation</h2>
-          <p class="fadeInRight animated">Weconnec intends to resolve the need for a central platform that allows, primarily students to 
-          share resources among themselves. Often times barriers impede how effective study resources are shared
-           among students. One such barrier is association.  Students may not know the right persons 
-           to be affiliated with in order to get helpful resources.  In addition, the project also seeks
-            to enhance how efficient students can manipulate study resources.  "WeConnec" is a web-based 
-            platform that grants users access to a library of documents as well as allow them to share documents 
-            with persons from their friend list after signing up for an account. Users have the option of making 
-            uploaded resources public or private. The platform's main function is to allow users to search through
-             a large pool of documents return relevant information based on the query in a timely manner. 
-             Another function that the project will implement is an answer search engine, this will allow users 
-             to pose a question after which a response, formulated from uploaded documents, will be returned. 
-             This response should have the correct answer for the question or if the engine could not find an 
-             appropriate answer it should suggest some resources that might contain the desired answer. </p>
-          <hr>
-        </div>
-        <div class="row">
-          <div class="col-lg-4 my-auto">
-            <div class="device-container">
-              <div class="device-mockup ipad_pro portrait white bounceInLeft animated">
-                <div class="device">
-                  <div class="screen">
-                    <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
-                    <img src="img/demo-screen-1.jpg" class="img-fluid" alt="">
-                  </div>
-                  <div class="button">
-                    <!-- You can hook the "home button" to some JavaScript events or just remove it -->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-8 my-auto">
-            <div class="container-fluid ">
-
-              <div class="row ">
-                <div class="col-lg-6">
-                  <div class="feature-item slideInRight animated">
-                  <i class="fas fa-mobile-alt"></i>
-                    <h3>Mobile Friendly</h3>
-                    <p >Ready to use HTML/CSS device mockups, no Photoshop required!</p>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="feature-item slideInRight animated">
-                    <i class="far fa-comments"></i>
-                    <h3>Chat</h3>
-                    <p >Put an image, video, animation, or anything else in the screen!</p>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-6">
-                  <div class="feature-item slideInRight animated">
-                    <i class="fas fa-search"></i>
-                    <h3>Refined Search</h3>
-                    <p >As always, this theme is free to download and use for any purpose!</p>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="feature-item slideInRight animated">
-                    <i class="fas fa-graduation-cap"></i>
-                    <h3>Huge library of resources</h3>
-                    <p >Since this theme is MIT licensed, you can use it commercially!</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-   `
-});
 
 Vue.component('card', {
   template: `
@@ -397,8 +444,8 @@ const Home = Vue.component('home',{
           
             <div class="header-content mx-auto  ">
               <h1 class="mb-5 flipInY wow animated">'weconnec' is platform for students to gain access to a library of publicly or privately shared documents.</h1>
-              <router-link class="btn bounceInUp animated btn-outline-light " to="/description"> Learn More</router-link>
-              <button type="button" class="btn bounceInUp wow animated btn-outline btn-xl" data-toggle="modal" data-target="#exampleModalCenter">Register Now</button>
+              <button type="button" class="btn bounceInUp animated btn-outline-light " data-target="#about-modal" data-toggle="modal">Learn More</button>
+              <button type="button" class="btn bounceInUp wow animated btn btn-outline-warning" data-toggle="modal" data-target="#register-modal">Register Now</button>
             
             </div>
                           </div>
@@ -419,7 +466,7 @@ const Home = Vue.component('home',{
           </div>
         </div>
 
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
 
@@ -445,7 +492,7 @@ const Home = Vue.component('home',{
             <form id="registerform" @submit.prevent="registerform" method="POST" enctype="multipart/form-data" novalidate="true">
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="first_name">First Name</label>
+                <label for="first_name ">First Name</label>
                 <input class="form-control" type="text" name="first_name" v-model="first_name" id="fname" placeholder="First Name" >
               </div>
               <div class="form-group col-md-6">
@@ -476,7 +523,7 @@ const Home = Vue.component('home',{
           </div>
           <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="sumbit" class="btn btn-primary" >Register</button>
+                <button type="sumbit" class="btn btn-warning" >Register</button>
               </div>
               </form>
         </div>
@@ -646,7 +693,6 @@ const router = new VueRouter({
     routes: [
     { path: "/", component: Home },
     { path: "/search", component: Search },
-    { path: "/description", component: Description },
     { path: "/profile", component:Profile}
     ]
 });

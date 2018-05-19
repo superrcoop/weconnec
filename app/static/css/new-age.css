@@ -5,7 +5,7 @@ body {
 }
 
 body {
-  font-family: 'Muli', 'Helvetica', 'Arial', 'sans-serif';
+  font-family: 'Montserrat', sans-serif;
 }
 
 a {
@@ -21,8 +21,8 @@ a:hover, a:focus {
 
 hr {
   max-width: 100px;
-  margin: 25px auto 0;
-  border-width: 1px;
+  margin: 20px auto 0;
+  border-width: 2px;
   border-color: rgba(34, 34, 34, 0.1);
 }
 
@@ -36,7 +36,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Catamaran', 'Helvetica', 'Arial', 'sans-serif';
+  font-family: 'Montserrat', sans-serif;
   font-weight: 200;
   letter-spacing: 1px;
 }
@@ -55,20 +55,27 @@ section h2 {
   font-size: 50px;
 }
 
+.btn {
+  border-radius: 300px;
+  font-family: 'Lato', 'Helvetica', 'Arial', 'sans-serif';
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
 #mainNav {
   border-color: rgba(34, 34, 34, 0.05);
   background-color: white;
   -webkit-transition: all .35s;
   -moz-transition: all .35s;
   transition: all .35s;
-  font-family: 'Catamaran', 'Helvetica', 'Arial', 'sans-serif';
+  font-family: 'Montserrat', sans-serif;
   font-weight: 200;
   letter-spacing: 1px;
 }
 
 #mainNav .navbar-brand {
   color: #fdcc52;
-  font-family: 'Catamaran', 'Helvetica', 'Arial', 'sans-serif';
+  font-family: 'Damion', cursive;
   font-weight: 200;
   letter-spacing: 1px;
 }
@@ -85,9 +92,13 @@ section h2 {
 
 #mainNav .navbar-nav > li > a {
   font-size: 11px;
-  font-family: 'Lato', 'Helvetica', 'Arial', 'sans-serif';
+  font-family: 'Montserrat', sans-serif;
   letter-spacing: 2px;
   text-transform: uppercase;
+}
+
+#mainNav .btn:hover {
+  background-color: #fcbd20;
 }
 
 #mainNav .navbar-nav > li > a.active {
@@ -129,6 +140,7 @@ header.masthead .header-content {
 
 header.masthead .header-content h1 {
   font-size: 30px;
+  font-family: 'Architects Daughter', cursive;
 }
 
 header.masthead .device-container {
@@ -170,7 +182,7 @@ section.download .badges .badge-link img {
 section.features {
   position: relative;
   width: 100%;
-  background: url("../images/bb.jpg");
+  background: url("../images/white.jpg");
   min-height:100vh;
   color: white;
 }
@@ -251,56 +263,6 @@ section.cta .overlay {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-section.contact {
-  text-align: center;
-}
-
-section.contact h2 {
-  margin-top: 0;
-  margin-bottom: 25px;
-}
-
-section.contact h2 i {
-  color: #dd4b39;
-}
-
-section.contact ul.list-social {
-  margin-bottom: 0;
-}
-
-section.contact ul.list-social li a {
-  font-size: 40px;
-  line-height: 80px;
-  display: block;
-  width: 80px;
-  height: 80px;
-  color: white;
-  border-radius: 100%;
-}
-
-section.contact ul.list-social li.social-twitter a {
-  background-color: #1da1f2;
-}
-
-section.contact ul.list-social li.social-twitter a:hover {
-  background-color: #0d95e8;
-}
-
-section.contact ul.list-social li.social-facebook a {
-  background-color: #3b5998;
-}
-
-section.contact ul.list-social li.social-facebook a:hover {
-  background-color: #344e86;
-}
-
-section.contact ul.list-social li.social-google-plus a {
-  background-color: #dd4b39;
-}
-
-section.contact ul.list-social li.social-google-plus a:hover {
-  background-color: #d73925;
-}
 
 footer {
   padding: 25px 0;
@@ -322,46 +284,9 @@ footer ul li a {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.3);
 }
-
 footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li a.active {
-  text-decoration: none;
+  color: #fcbd20;
 }
 
-.bg-primary {
-  background: #fdcc52;
-  background: -webkit-linear-gradient(#fdcc52, #fdc539);
-  background: linear-gradient(#fdcc52, #fdc539);
-}
 
-.text-primary {
-  color: #fdcc52;
-}
 
-.no-gutter > [class*='col-'] {
-  padding-right: 0;
-  padding-left: 0;
-}
-
-.btn-outline {
-  color: white;
-  border: 1px solid;
-  border-color: white;
-}
-
-.btn-outline:hover, .btn-outline:focus, .btn-outline:active, .btn-outline.active {
-  color: white;
-  border-color: #fdcc52;
-  background-color: #fdcc52;
-}
-
-.btn {
-  border-radius: 300px;
-  font-family: 'Lato', 'Helvetica', 'Arial', 'sans-serif';
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-.btn-xl {
-  font-size: 11px;
-  padding: 15px 45px;
-}
