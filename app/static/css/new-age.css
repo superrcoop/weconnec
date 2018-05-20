@@ -159,9 +159,11 @@ header.masthead .device-container .screen img {
 section.features {
   position: relative;
   width: 100%;
-  background: url("../images/white.jpg");
-  min-height:100vh;
+  padding-top: 150px;
+  padding-bottom: 50px;
   color: white;
+  background: url("../images/college-background-images.jpg");
+  height:100vh;
 }
 section.features .section-heading {
   margin-bottom: 100px;
@@ -205,39 +207,6 @@ section.features .feature-item i {
   background: linear-gradient(to left, #7b4397, #dc2430);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-section.cta {
-  position: relative;
-  padding: 250px 0;
-  background-image: url("../images/up-shot.png");
-  background-position: center;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
-
-section.cta .cta-content {
-  position: relative;
-  z-index: 1;
-}
-
-section.cta .cta-content h2 {
-  font-size: 50px;
-  max-width: 450px;
-  margin-top: 0;
-  margin-bottom: 25px;
-  color: white;
-}
-
-section.cta .overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
 }
 
 

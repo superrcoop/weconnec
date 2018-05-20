@@ -15,7 +15,7 @@ Vue.component('app-header', {
               <router-link class="nav-link js-scroll-trigger" to="/search"> Search </router-link>
             </li>
           </ul>
-          <form class="form-inline " id="loginform" @submit.prevent="loginform" method="POST" enctype="multipart/form-data" novalidate="true">
+          <form v-if="isLoggedIn" class="form-inline " id="loginform" @submit.prevent="loginform" method="POST" enctype="multipart/form-data" novalidate="true">
             <div class="input-group mb-2 mr-sm-2 ">
               <div class="input-group-prepend">
                 <div class="input-group-text"><i class="fas fa-user"></i></div>
@@ -31,6 +31,18 @@ Vue.component('app-header', {
             </div>
               <button type="submit" class="btn mb-2 mr-sm-2">Log in</button>
           </form>
+          <form v-else class="form-inline " id="loginform" @submit.prevent="loginform" method="POST" enctype="multipart/form-data" novalidate="true">
+            <div class="input-group mb-2 mr-sm-2 ">
+              <div class="input-group-prepend">
+                <div class="input-group-text"><i class="fas fa-user"></i></div>
+              </div>
+              <input class="form-control " type="text" name="username" v-model="username" id="username" placeholder="Username" >
+              
+            </div>
+              <button type="submit" class="btn mb-2 mr-sm-2">Log in</button>
+          </form>
+
+
           <p class="alert alert-danger" role="alert" v-if="errors.length">
               <b>Please correct the following error(s):</b>
               <ul>
@@ -48,6 +60,11 @@ Vue.component('app-header', {
       plain_password:''
     }
  },
+ computed: {
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
+    }
+  },
   methods: {
     loginform:function(e) {
       e.preventDefault();
@@ -102,7 +119,41 @@ Vue.component('app-header', {
       .catch(function (error) {
         console.log(error);
       });
-    }
+    },
+    logout: function(){
+        if (localStorage.getItem('jwt_token')!==null){
+            let self = this;
+            self.token=localStorage.getItem('jwt_token');
+            fetch("/api/auth/logout", { 
+                method: 'GET',
+                headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('jwt_token')
+                    },
+                credentials: 'same-origin'
+                
+                })
+                .then(function (response) {
+
+              if (!response.ok) {
+          throw Error(response.statusText);
+
+               }
+              return response.json();
+        })
+        .then(function (jsonResponse) {
+          if(jsonResponse.errors) {
+            self.errors.push(jsonResponse.errors);
+          }else{
+                        this.$store.dispatch('logout');
+                       localStorage.clear();
+                         window.location = "/";
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
+        }
   }
 });
 
@@ -282,10 +333,11 @@ Vue.component('app-footer', {
 Vue.component('card', {
   template: `
 
-  <div class="card ">
+  <div class="card">
+
   <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif"  alt="Card image cap">
   <div class="card-body">
-    <h5 class="card-title">{{title}}</h5>
+    <h5 class="card-title text-center">{{title}}</h5>
     <p><i class="fa fa-tags"></i> Tags: <a href=""><span class="badge badge-info">#waves</span></a> <a href=""><span class="badge badge-info">#CSS</span></a> <a href=""><span class="badge badge-info">#Vue.js</span></a></p>
     <p class="card-text">{{caption}}</p>
     <p class="card-text"><small class="text-muted">Posted By: @{{username}} on {{date_post}}</small><p v-if="this.username===this.user">
@@ -633,7 +685,7 @@ const Profile = Vue.component('profile',{
       </h5>
     </div>
 
-    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+    <div id="collapseOne" class="collapse hide" aria-labelledby="headingOne" data-parent="#accordionExample">
       <div class="card-body">
         Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
       </div>
@@ -717,7 +769,14 @@ const Profile = Vue.component('profile',{
     return {
       posts: [
 { id: 1, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__'},
-      { id: 3, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} 
+      { id: 3, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} ,
+     { id: 4, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__'},
+      { id: 5, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} ,
+     { id: 6, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__'},
+      { id: 7, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} ,
+     { id: 78, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__'},
+      { id: 8, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} 
+     
      ],
       errors:[],
       messages:[],
@@ -808,6 +867,23 @@ const Profile = Vue.component('profile',{
     }
 });
 
+// Vuex State Management for user authentication
+const store = new Vuex.Store({
+  state: {
+    isLoggedIn: localStorage.getItem("jwt_token")
+  },
+  getters: {
+    isLoggedIn: state => {
+      return state.isLoggedIn
+    }
+  },
+  actions:{
+    logout() {
+      localStorage.removeItem("jwt_token");
+    }
+  }
+});
+
 // Define Routes
 const router = new VueRouter({
     routes: [
@@ -820,5 +896,5 @@ const router = new VueRouter({
 // Instantiate our main Vue Instance
 let app = new Vue({
     el: "#app",
-    router
+    router,store
 });
