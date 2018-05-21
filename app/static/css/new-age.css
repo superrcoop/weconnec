@@ -88,7 +88,7 @@ section h2 {
 #mainNav .navbar-toggler {
   font-size: 12px;
   padding: 8px 10px;
-  color: #222222;
+  color: white;
 }
 
 #mainNav .navbar-nav > li > a {
@@ -96,6 +96,7 @@ section h2 {
   font-family: 'Montserrat', sans-serif;
   letter-spacing: 2px;
   text-transform: uppercase;
+
 }
 
 #mainNav .btn:hover {
@@ -113,7 +114,7 @@ section h2 {
 
 #mainNav .navbar-nav > li > a,
 #mainNav .navbar-nav > li > a:focus {
-  color: #222222;
+  color: white;
 }
 
 #mainNav .navbar-nav > li > a:hover,
@@ -169,7 +170,8 @@ section.features .section-heading {
 }
 
 section.features .section-heading h2 {
-  margin-top: 0;
+  font-size: 30px;
+  font-family: 'Architects Daughter', cursive;
 }
 
 section.features .section-heading p {
@@ -233,5 +235,16 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
   color: #fcbd20;
 }
 
+.card-text{
+  color: black;
+}
+
+.card{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.card img{
+    width: 50px;
+}
 
 

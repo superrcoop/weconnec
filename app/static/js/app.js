@@ -2,22 +2,22 @@ Vue.component('app-header', {
   template: `
     <nav class=" navbar-expand-lg fixed-top navbar navbar-dark" style="background-color: #222222;" id="mainNav">
       
-        <router-link class="navbar-brand js-scroll-trigger" to="/">weconnec </router-link>
+        <router-link class="navbar-brand js-scroll-trigger fadeInDown animated" to="/">weconnec </router-link>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <i class="fas fa-bars"></i>
         </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
+        <div class="collapse navbar-collapse fadeInDown animated" id="navbarResponsive">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0 ">
             <li class="nav-item active">
               <router-link class="nav-link js-scroll-trigger" to="/">Home </router-link>
             </li>
             <li v-if="isLoggedIn== false" class="nav-item ">
-              <router-link class="nav-link js-scroll-trigger" to="/search"> Search </router-link>
+              <router-link class="nav-link js-scroll-trigger " to="/search"> Search </router-link>
             </li>
           </ul>
           <searchbar v-if="isLoggedIn== true"></searchbar><hr>
                       <div v-if="isLoggedIn== true" class="btn-group ">
-                      <router-link class="btn btn-secondary" to="/profile"> Profile </router-link>
+                      <router-link v-on:click.native="windowLeave" class="btn btn-secondary" to="/profile"> Profile </router-link>
               <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                Logout
               </button>
@@ -337,28 +337,39 @@ Vue.component('app-footer', {
     `
 });
 
-
 Vue.component('card', {
   template: `
+<div class="container py-3">
+    <div class="card slideInUp animated">
+      <div class="row ">
+        <div class="col-sm-2">
+            <img src="http://www.proher-natura.com/e-commerce/themes/images/icon-pdf.png" alt="Card image cap">
+          </div>
+          <div class="col-md-8 px-2">
+            <div class="card-block px-2">
+              <h3><a href="card-title">{{title}}</a></h3>
+              <p class="card-text "><small>
 
-  <div class="card">
+              Tags: <span v-for="tag in this.tags" class="badge badge-secondary">{{tag}}</span>
+              </small>
 
-  <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif"  alt="Card image cap">
-  <div class="card-body">
-    <h5 class="card-title text-center">{{title}}</h5>
-    <p><i class="fa fa-tags"></i> Tags: <a href=""><span class="badge badge-info">#waves</span></a> <a href=""><span class="badge badge-info">#CSS</span></a> <a href=""><span class="badge badge-info">#Vue.js</span></a></p>
-    <p class="card-text">{{caption}}</p>
-    <p class="card-text"><small class="text-muted">Posted By: @{{username}} on {{date_post}}</small><p v-if="this.username===this.user">
-      <button @click="delete_post" class="fas fa-trash-alt float-right"></button>
-    </p></p>
+              </p>
+    
+              <p class="card-text">{{caption}}</p>
+              <p class="card-text"><small class="text-muted">Posted By: @{{username}} on {{date_post}}</small><p v-if="this.username===this.user"></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
   </div>
-</div>
   `,props:{
     id:String,
     title:String,
     username:String,
     date_post:String,
-    tags:String,
+    tags:Array,
     caption:String,
     photo:String
   },
@@ -374,9 +385,9 @@ Vue.component('card', {
 Vue.component('searchbar', {
   template: `
   <form  id="searchform" @submit.prevent="searchform" method="POST" enctype="multipart/form-data">
-            <div id="custom-search-input" class=" fadeInDown animated">
+            <div id="custom-search-input" class=" slideInRight animated">
                 <div class="input-group col-md-12 ">
-                <input class="form-control input-lg" type="text" name="search" v-model="search" id="search" placeholder="search" >
+                <input class="form-control input-lg" type="text" name="search" v-model="search" id="search"  >
                     <span class="input-group-btn">
                         <button class="btn btn-info btn-lg" type="submit">
                             <i class="fas fa-search"></i>
@@ -388,7 +399,8 @@ Vue.component('searchbar', {
   `,data:function(){
     return {
       posts: [],
-      errors:[]
+      errors:[],
+      search:''
     }
   },
 
@@ -400,7 +412,7 @@ Vue.component('searchbar', {
         let form_data = new FormData();
         if(self.search){form_data.append('search',self.search);}
         fetch("/api/search", { 
-        method: 'POST',
+        method: 'GET',
         body: form_data,
         headers: {
                 'X-CSRFToken': token
@@ -434,12 +446,11 @@ const Search =Vue.component('search', {
     template: `
     <section class="features" id="features">
       <div class="container">
-        <div class="section-heading text-center slideInLeft wow animated">
-          <h2>Search</h2>
-          <p >Ask a Question or search for a document by title or content..</p>
+        <div class="section-heading text-center slideInRight wow animated">
+          <h2>Ask a Question or search for a document by title or content.</h2>
         </div>
-        <div class="row">
           <div class="col-md-8 mx-auto">
+          <searchbar></searchbar>
             <p class="alert alert-danger" role="alert" v-if="errors.length">
             <b>Please correct the following error(s):</b>
             <ul>
@@ -451,28 +462,26 @@ const Search =Vue.component('search', {
                 <li v-for="message in messages">{{ message }}</li>
               </ul>
             </p>
-            <searchbar></searchbar>
+            
             <hr>
-          <div class="card-columns"><hr>
             <card  v-for="post in posts"
               v-bind:key="post.id"
               v-bind:title="post.title" 
               v-bind:caption="post.caption"
               v-bind:date_post="post.date_post"
               v-bind:photo="post.photo"
+              v-bind:tags="post.tags"
               v-bind:username="post.username">
             </card>
-            </div>
           </div>
-        </div>
       </div>
     </section>
         `,
   data:function(){
     return {
       posts: [
-{ id: 1, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__'},
-      { id: 3, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} 
+{ id: 1, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__',tags:['this','is','a','tag']},
+      { id: 3, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__',tags:['this','is','a','tag']} 
      ],
       errors:[],
       messages:[],
