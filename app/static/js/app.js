@@ -348,7 +348,7 @@ Vue.component('card', {
           <div class="col-md-8 px-2">
             <div class="card-block px-2">
               <h3><a href="card-title">{{title}}</a></h3>
-              <p class="card-text "><small>
+              <p  class="card-text "><small>
 
               Tags: <span v-for="tag in this.tags" class="badge badge-secondary">{{tag}}</span>
               </small>

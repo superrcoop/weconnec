@@ -18,7 +18,7 @@ def get_date():
 
 def generate_file_URI(post_id=None):
     if post_id:      
-        URI=UPLOAD_FOLDER+'/posts/'+str(uuid.uuid4().get_hex()[0:6])+'/'
+        URI=UPLOAD_FOLDER+'/resorces/'+str(uuid.uuid4().get_hex()[0:6])+'/'
     else:
         URI=UPLOAD_FOLDER+'/prof_photo/'+str(uuid.uuid4().get_hex()[0:9])+'/'
     if not os.path.exists(URI):
@@ -40,7 +40,7 @@ class Users(db.Model,UserMixin):
     biography = db.Column(db.String(300)) 
     profile_photo=db.Column(db.String(80))
     joined_on = db.Column(db.Date,nullable=False)
-    posts=db.relationship("Posts",backref='users')
+    uploads=db.relationship("Resources",backref='users')
     follows=db.relationship("Follows",backref='users')
 
     def __init__(self,user_name,plain_password,first_name,last_name,email):
@@ -74,19 +74,21 @@ class Users(db.Model,UserMixin):
     def __repr__(self):
         return '<Users %r>' % (self.username)
         
-class Posts(db.Model):
-    __tablename__ = 'posts'
+class Resources(db.Model):
+    __tablename__ = 'resources'
     id = db.Column(db.String(10), primary_key=True)
     user_id = db.Column(db.Integer,db.ForeignKey('users.id'),nullable=False)
     image_URI = db.Column(db.String(80))
-    caption = db.Column(db.String(120))
+    tags = db.Column(db.String(120))
+    description = db.Column(db.String(120))
     created_on =db.Column(db.Date,nullable=False)
 
-    def __init__(self,user_id,caption,image_URI=None):
+    def __init__(self,user_id,description,tags,image_URI=None):
         self.id=get_newpost_id()
         self.user_id=user_id
         self.image_URI= generate_file_URI(id)
-        self.caption=caption
+        self.description=description
+        self.tags=tags
         self.created_on=get_date()
 
     def __repr__(self):
