@@ -11,11 +11,27 @@ Vue.component('app-header', {
             <li class="nav-item active">
               <router-link class="nav-link js-scroll-trigger" to="/">Home </router-link>
             </li>
-            <li class="nav-item ">
+            <li v-if="isLoggedIn== false" class="nav-item ">
               <router-link class="nav-link js-scroll-trigger" to="/search"> Search </router-link>
             </li>
           </ul>
-          <form v-if="isLoggedIn" class="form-inline " id="loginform" @submit.prevent="loginform" method="POST" enctype="multipart/form-data" novalidate="true">
+          <searchbar v-if="isLoggedIn== true"></searchbar><hr>
+                      <div v-if="isLoggedIn== true" class="btn-group ">
+                      <router-link class="btn btn-secondary" to="/profile"> Profile </router-link>
+              <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               Logout
+              </button>
+              <div class="dropdown-menu">
+                <p class="dropdown-item" href="#">Are you sure?</p>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item">
+                  <button type="button" class="btn btn-secondary" data-dismiss="dropdown">Close</button>
+                  <button type="button" @click="logout" class="btn btn-warning" >Logout</button>
+                </div>
+              </div>
+            </div>
+
+          <form v-else class="form-inline " id="loginform" @submit.prevent="loginform" method="POST" enctype="multipart/form-data" novalidate="true">
             <div class="input-group mb-2 mr-sm-2 ">
               <div class="input-group-prepend">
                 <div class="input-group-text"><i class="fas fa-user"></i></div>
@@ -31,16 +47,7 @@ Vue.component('app-header', {
             </div>
               <button type="submit" class="btn mb-2 mr-sm-2">Log in</button>
           </form>
-          <form v-else class="form-inline " id="loginform" @submit.prevent="loginform" method="POST" enctype="multipart/form-data" novalidate="true">
-            <div class="input-group mb-2 mr-sm-2 ">
-              <div class="input-group-prepend">
-                <div class="input-group-text"><i class="fas fa-user"></i></div>
-              </div>
-              <input class="form-control " type="text" name="username" v-model="username" id="username" placeholder="Username" >
-              
-            </div>
-              <button type="submit" class="btn mb-2 mr-sm-2">Log in</button>
-          </form>
+          
 
 
           <p class="alert alert-danger" role="alert" v-if="errors.length">
@@ -62,7 +69,7 @@ Vue.component('app-header', {
  },
  computed: {
     isLoggedIn() {
-      return this.$store.getters.isLoggedIn;
+      return this.$store.state.isLoggedIn;
     }
   },
   methods: {
@@ -120,7 +127,8 @@ Vue.component('app-header', {
         console.log(error);
       });
     },
-    logout: function(){
+    logout: function(e){
+      e.preventDefault();
         if (localStorage.getItem('jwt_token')!==null){
             let self = this;
             self.token=localStorage.getItem('jwt_token');
@@ -144,9 +152,9 @@ Vue.component('app-header', {
           if(jsonResponse.errors) {
             self.errors.push(jsonResponse.errors);
           }else{
-                        this.$store.dispatch('logout');
+                        self.$store.dispatch('logout');
                        localStorage.clear();
-                         window.location = "/";
+                        self.$router.push("/");
                     }
                 })
                 .catch(function (error) {
@@ -401,6 +409,64 @@ Vue.component('card', {
   }
 });
 
+Vue.component('searchbar', {
+  template: `
+  <form  id="searchform" @submit.prevent="searchform" method="POST" enctype="multipart/form-data">
+            <div id="custom-search-input" class=" fadeInDown animated">
+                <div class="input-group col-md-12 ">
+                <input class="form-control input-lg" type="text" name="search" v-model="search" id="search" placeholder="search" >
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-lg" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+        </div>
+        </form>
+  `,data:function(){
+    return {
+      posts: [],
+      errors:[]
+    }
+  },
+
+  methods:{ 
+    searchform: function(e) {
+        e.preventDefault();
+        let self = this;
+        self.errors = [];
+        let form_data = new FormData();
+        if(self.search){form_data.append('search',self.search);}
+        fetch("/api/search", { 
+        method: 'POST',
+        body: form_data,
+        headers: {
+                'X-CSRFToken': token
+            },
+        credentials: 'same-origin'
+        
+        })
+        .then(function (response) {
+          if (!response.ok) {
+throw Error(response.statusText);
+}
+            return response.json();
+        })
+        .then(function (jsonResponse) {
+             if(jsonResponse.errors) {
+        self.errors.push(jsonResponse.errors);
+      }else{
+        // get list of post results and display on search page
+        console.log(jsonResponse);
+      }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+  }
+});
+
 
 const Search =Vue.component('search', {
     template: `
@@ -423,18 +489,8 @@ const Search =Vue.component('search', {
                 <li v-for="message in messages">{{ message }}</li>
               </ul>
             </p>
-            <form  id="searchform" @submit.prevent="searchform" method="POST" enctype="multipart/form-data">
-            <div id="custom-search-input" class=" fadeInUp animated">
-                <div class="input-group col-md-12 ">
-                <input class="form-control input-lg" type="text" name="search" v-model="search" id="search" placeholder="search" >
-                    <span class="input-group-btn">
-                        <button class="btn btn-info btn-lg" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </span>
-                </div>
-        </div>
-        </form><hr>
+            <searchbar></searchbar>
+            <hr>
           <div class="card-columns"><hr>
             <card  v-for="post in posts"
               v-bind:key="post.id"
@@ -460,43 +516,7 @@ const Search =Vue.component('search', {
       messages:[],
       search:''
     }
-  },
-      
-    searchform: function () {
-        let self = this;
-        self.errors = [];
-        let form_data = new FormData();
-        if(self.search){form_data.append('search',self.search);}
-        fetch("/api/posts/new", { 
-        method: 'POST',
-        body: form_data,
-        headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('jwt_token'),
-                'X-CSRFToken': token
-            },
-        credentials: 'same-origin'
-        
-        })
-        .then(function (response) {
-          if (!response.ok) {
-throw Error(response.statusText);
-}
-            return response.json();
-        })
-        .then(function (jsonResponse) {
-             if(jsonResponse.errors) {
-        self.errors.push(jsonResponse.errors);
-      }else{
-        if(jsonResponse.messages) {
-        self.messages.push(jsonResponse.messages);
-      }
-        console.log(jsonResponse);
-      }
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    }
+  }
     
 });
 
@@ -789,7 +809,7 @@ const Profile = Vue.component('profile',{
  created: function () {
             let self = this;
             if(localStorage.getItem('jwt_token')!==null){
-                fetch("/api/posts/all", { 
+                fetch("/api/uploads/all", { 
                 method: 'GET',
                 headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('jwt_token'),
@@ -870,12 +890,7 @@ const Profile = Vue.component('profile',{
 // Vuex State Management for user authentication
 const store = new Vuex.Store({
   state: {
-    isLoggedIn: localStorage.getItem("jwt_token")
-  },
-  getters: {
-    isLoggedIn: state => {
-      return state.isLoggedIn
-    }
+    isLoggedIn: !!localStorage.getItem("jwt_token")
   },
   actions:{
     logout() {
