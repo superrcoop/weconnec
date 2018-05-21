@@ -3,7 +3,7 @@ from flask import render_template, request, session, redirect, url_for ,jsonify,
 from controllers import form_errors 
 from forms import LoginForm, RegistrationForm, SearchForm
 from flask_login import login_user, logout_user, current_user, login_required
-from models import Users, Posts, Follows
+from models import Users, Resources, Follows
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import CombinedMultiDict
 import jwt ,os ,json
@@ -49,27 +49,27 @@ def index():
     """Render website's initial page and let VueJS take over."""
     return render_template('index.html')
 
-@app.route('/api/search', methods = ['GET'])
+@app.route('/api/search', methods = ['POST'])
 def search():
     error=None
     form = searchForm()
-    if request.method =='GET' and form.validate_on_submit():
-        # implement python spacy here
-        #posts=Posts.query.order_by(Posts.created_on.desc()).all() ----> [by user]
-        listposts=[]
-        liked=False
-        for i in range (0,len(posts)):
-            user=Users.query.filter_by(id=posts[i].user_id).first();
-            post_data={
-            'id':posts[i].id,
-            'photo':posts[i].image_URI,#get_uploaded_image(posts[i].image_URI),
-            'caption':posts[i].caption,
-            'date_post':posts[i].created_on,
-            'username':user.user_name,
-            'userphoto':user.profile_photo
-            }
-            listposts.append(post_data)
-        return jsonify({'posts': listposts})
+    if request.method =='POST' and form.validate_on_submit():
+        # strip search term and tokenize for comparison
+        #resources=Posts.query.order_by(Posts.created_on.desc()).all() ----> [by user]
+        responses=[]
+        for i in range (0,len(resources)):
+            if resource_match(responses[i],search): # implement python spacy here, if true 
+                user=Users.query.filter_by(id=resources[i].user_id).first();
+                resource={
+                'id':resources[i].id,
+                'photo':resources[i].image_URI,#get_resource(posts[i].image_URI),
+                'caption':resources[i].caption,
+                'date_post':resources[i].created_on,
+                'username':user.user_name,
+                'userphoto':user.profile_photo
+                }
+                responses.append(resource)
+        return jsonify({'resources': resources})
     else:
         return jsonify({'errors':error})
 

@@ -235,12 +235,18 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
   color: #fcbd20;
 }
 
+.card-title{
+  font-weight: 800px;
+  color: black;
+}
+
 .card-text{
   color: black;
 }
 
 .card{
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  font-family: 'Montserrat', sans-serif;
+  box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.6), 0 12px 26px 0 rgba(0, 0, 0, 0.30);
 }
 
 .card img{

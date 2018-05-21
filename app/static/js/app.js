@@ -347,19 +347,16 @@ Vue.component('card', {
           </div>
           <div class="col-md-8 px-2">
             <div class="card-block px-2">
-              <h3><a href="card-title">{{title}}</a></h3>
-              <p  class="card-text "><small>
-
-              Tags: <span v-for="tag in this.tags" class="badge badge-secondary">{{tag}}</span>
+              <h3><a href="#" class="card-title">{{title}}</a></h3>
+              <p  class="card-text "><small class="px-1" v-for="tag in this.tags">
+                <a href="#" class=" badge badge-pill badge-warning">{{tag}}</a>
               </small>
-
               </p>
-    
-              <p class="card-text">{{caption}}</p>
+              <p class="card-text">Your might find this document useful to your search</p>
+              <p class="card-text text-muted">{{caption}}</p>
               <p class="card-text"><small class="text-muted">Posted By: @{{username}} on {{date_post}}</small><p v-if="this.username===this.user"></p>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -412,7 +409,7 @@ Vue.component('searchbar', {
         let form_data = new FormData();
         if(self.search){form_data.append('search',self.search);}
         fetch("/api/search", { 
-        method: 'GET',
+        method: 'POST',
         body: form_data,
         headers: {
                 'X-CSRFToken': token

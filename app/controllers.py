@@ -1,3 +1,7 @@
+import spacy
+nlp = spacy.load('en')
+
+
 def form_errors(form):
     error_messages = []
     """Collects form errors"""
@@ -22,4 +26,10 @@ def strip_tags(string):
         string input from user converted to csv for db store
     """
     return tags_as_array
+
+def get_resource(resource):
+    """
+        retrive docment from URI
+    """
+    return document
 
