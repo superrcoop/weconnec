@@ -49,6 +49,33 @@ def index():
     """Render website's initial page and let VueJS take over."""
     return render_template('index.html')
 
+@app.route('/api/search', methods = ['GET'])
+def search():
+    error=None
+    form = searchForm()
+    if request.method =='GET' and form.validate_on_submit():
+        # implement python spacy here
+        #posts=Posts.query.order_by(Posts.created_on.desc()).all() ----> [by user]
+        listposts=[]
+        liked=False
+        for i in range (0,len(posts)):
+            user=Users.query.filter_by(id=posts[i].user_id).first();
+            post_data={
+            'id':posts[i].id,
+            'photo':posts[i].image_URI,#get_uploaded_image(posts[i].image_URI),
+            'caption':posts[i].caption,
+            'date_post':posts[i].created_on,
+            'username':user.user_name,
+            'userphoto':user.profile_photo
+            }
+            listposts.append(post_data)
+        return jsonify({'posts': listposts})
+    else:
+        return jsonify({'errors':error})
+
+
+""" A P I
+
 @login_manager.user_loader
 def load_user(id):
    return Users.query.get(int(id))
@@ -122,7 +149,7 @@ def register():
 @app.route('/api/uploads/new', methods = ['POST'])
 @login_required
 @requires_auth
-def new_post():
+def new_upload():
     error=None
     form = PostsForm(CombinedMultiDict((request.files, request.form)))
     if request.method =='POST' and form.validate_on_submit():
@@ -149,37 +176,6 @@ def new_post():
             return jsonify({'messages':'Post successfully'})
     else:
         return jsonify({'errors':form_errors(form)})
-
-@app.route('/api/search', methods = ['GET'])
-def search():
-    error=None
-    form = searchForm()
-    if request.method =='GET' and form.validate_on_submit():
-        #python spacy
-        #posts=Posts.query.order_by(Posts.created_on.desc()).all() ----> [by user]
-        listposts=[]
-        liked=False
-        for i in range (0,len(posts)):
-            count=Likes.query.filter_by(post_id=posts[i].id).all()
-            user=Users.query.filter_by(id=posts[i].user_id).first();
-            if Likes.query.filter_by(post_id=posts[i].id, user_id=current_user.id):
-                liked=True
-
-            post_data={
-            'id':posts[i].id,
-            'photo':posts[i].image_URI,#get_uploaded_image(posts[i].image_URI),
-            'caption':posts[i].caption,
-            'date_post':posts[i].created_on,
-            'likes':len(count),
-            'liked':liked,
-            'username':user.user_name,
-            'userphoto':user.profile_photo
-            }
-            listposts.append(post_data)
-        return jsonify({'posts': listposts})
-    else:
-        return jsonify({'errors':error})
-
 
 @app.route('/api/uploads/all', methods = ['GET'])
 @login_required
@@ -228,7 +224,6 @@ def delete_post():
         return jsonify({'errors':error})
 
 
-""" A P I
 
 @app.route('/api/users/<username>', methods = ['GET'])
 @login_required
