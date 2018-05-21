@@ -11,12 +11,27 @@ Vue.component('app-header', {
             <li class="nav-item active">
               <router-link class="nav-link js-scroll-trigger" to="/">Home </router-link>
             </li>
-            <li class="nav-item ">
+            <li v-if="isLoggedIn== false" class="nav-item ">
               <router-link class="nav-link js-scroll-trigger" to="/search"> Search </router-link>
             </li>
           </ul>
-          <form class="form-inline " id="loginform" @submit.prevent="loginform" method="POST" enctype="multipart/form-data" novalidate="true">
-            
+          <searchbar v-if="isLoggedIn== true"></searchbar><hr>
+                      <div v-if="isLoggedIn== true" class="btn-group ">
+                      <router-link class="btn btn-secondary" to="/profile"> Profile </router-link>
+              <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               Logout
+              </button>
+              <div class="dropdown-menu">
+                <p class="dropdown-item" href="#">Are you sure?</p>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item">
+                  <button type="button" class="btn btn-secondary" data-dismiss="dropdown">Close</button>
+                  <button type="button" @click="logout" class="btn btn-warning" >Logout</button>
+                </div>
+              </div>
+            </div>
+
+          <form v-else class="form-inline " id="loginform" @submit.prevent="loginform" method="POST" enctype="multipart/form-data" novalidate="true">
             <div class="input-group mb-2 mr-sm-2 ">
               <div class="input-group-prepend">
                 <div class="input-group-text"><i class="fas fa-user"></i></div>
@@ -30,8 +45,11 @@ Vue.component('app-header', {
               </div>
               <input class="form-control" type="Password" name="plain_password" v-model="plain_password" id="plain_password" placeholder="Password" >
             </div>
-              <button type="submit" class="btn btn-light mb-2 mr-sm-2">Log in</button>
+              <button type="submit" class="btn mb-2 mr-sm-2">Log in</button>
           </form>
+          
+
+
           <p class="alert alert-danger" role="alert" v-if="errors.length">
               <b>Please correct the following error(s):</b>
               <ul>
@@ -49,6 +67,11 @@ Vue.component('app-header', {
       plain_password:''
     }
  },
+ computed: {
+    isLoggedIn() {
+      return this.$store.state.isLoggedIn;
+    }
+  },
   methods: {
     loginform:function(e) {
       e.preventDefault();
@@ -77,7 +100,6 @@ Vue.component('app-header', {
         if(jsonResponse.errors) {
           self.errors.push(jsonResponse.errors);
         }else{
-
           console.log(jsonResponse.messages);
           let token = jsonResponse.userdata.token;
           let username=jsonResponse.userdata.user_name;
@@ -97,13 +119,49 @@ Vue.component('app-header', {
           localStorage.setItem('post',posts);
           localStorage.setItem('following',following);
           localStorage.setItem('followers',followers);
+          document.getElementById("loginform").reset();
           self.$router.push('/profile');
         }   
       })
       .catch(function (error) {
         console.log(error);
       });
-    }
+    },
+    logout: function(e){
+      e.preventDefault();
+        if (localStorage.getItem('jwt_token')!==null){
+            let self = this;
+            self.token=localStorage.getItem('jwt_token');
+            fetch("/api/auth/logout", { 
+                method: 'GET',
+                headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('jwt_token')
+                    },
+                credentials: 'same-origin'
+                
+                })
+                .then(function (response) {
+
+              if (!response.ok) {
+          throw Error(response.statusText);
+
+               }
+              return response.json();
+        })
+        .then(function (jsonResponse) {
+          if(jsonResponse.errors) {
+            self.errors.push(jsonResponse.errors);
+          }else{
+                        self.$store.dispatch('logout');
+                       localStorage.clear();
+                        self.$router.push("/");
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
+        }
   }
 });
 
@@ -114,22 +172,164 @@ Vue.component('app-footer', {
         <p>&copy; weconnec 2018. All Rights Reserved.</p>
         <ul class="list-inline">
           <li class="list-inline-item">
-            <a href="#">Account</a>
+            <a href="#about-modal" data-toggle="modal">About</a>
+            <div class="modal fade" id="about-modal" tabindex="-1" role="dialog" aria-labelledby="title-about" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-about">About</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                   Weconnec intends to resolve the need for a central platform that allows, primarily students to 
+                  share resources among themselves. Often times barriers impede how effective study resources are shared
+                   among students. One such barrier is association.  Students may not know the right persons 
+                   to be affiliated with in order to get helpful resources.  In addition, the project also seeks
+                    to enhance how efficient students can manipulate study resources.  "WeConnec" is a web-based 
+                    platform that grants users access to a library of documents as well as allow them to share documents 
+                    with persons from their friend list after signing up for an account. Users have the option of making 
+                    uploaded resources public or private. The platform's main function is to allow users to search through
+                     a large pool of documents return relevant information based on the query in a timely manner. 
+                     Another function that the project will implement is an answer search engine, this will allow users 
+                     to pose a question after which a response, formulated from uploaded documents, will be returned. 
+                     This response should have the correct answer for the question or if the engine could not find an 
+                     appropriate answer it should suggest some resources that might contain the desired answer. 
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
           <li class="list-inline-item">
-            <a href="#">About</a>
+            <a href="#account-modal" data-toggle="modal">Account</a>
+            <div class="modal fade" id="account-modal" tabindex="-1" role="dialog" aria-labelledby="title-account" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-account">Account Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                    You need to sign in before you can view account information
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
           <li class="list-inline-item">
-            <a href="#">Privacy &amp; Terms</a>
+            <a href="#privacy-modal" data-toggle="modal">Privacy Policy</a>
+            <div class="modal fade" id="privacy-modal" tabindex="-1" role="dialog" aria-labelledby="title-privacy" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-privacy">Privacy Policy</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                    Effective date: May 19, 2018
+                      weconnec ("us", "we", or "our") operates the weconnec.xyz website (the "Service").
+                      This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data. This Privacy Policy for weconnec is powered by TermsFeed.
+                      We use your data to provide and improve the Service. By using the Service, you agree to the collection and use of information in accordance with this policy. Unless otherwise defined in this Privacy Policy, terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, accessible from weconnec.xyz
+                      
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
           <li class="list-inline-item">
-            <a href="#">Help</a>
+            <a href="#terms-modal" data-toggle="modal">Terms of use</a>
+            <div class="modal fade" id="terms-modal" tabindex="-1" role="dialog" aria-labelledby="title-terms" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-terms">Terms of Use</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                    Note: Our Terms of Use are changing.
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
           <li class="list-inline-item">
-            <a href="#">FAQ</a>
+            <a href="#faq-modal" data-toggle="modal">FAQ</a>
+            <div class="modal fade" id="faq-modal" tabindex="-1" role="dialog" aria-labelledby="title-faq" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-faq">FAQ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                    Frequently asked question
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
           <li class="list-inline-item">
-            <a href="#">More</a>
+            <a href="#help-modal" data-toggle="modal">Help</a>
+            <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="title-help" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-help">Help</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                    How to use ?
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="list-inline-item">
+            <a href="#contact-us" data-toggle="modal">Contact us</a>
+            <div class="modal fade" id="contact-us" tabindex="-1" role="dialog" aria-labelledby="title-contact" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-contact">Contact us</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                    contact form goes here
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="list-inline-item">
+            <a href="#more" data-toggle="modal">More</a>
+            <div class="modal fade" id="more" tabindex="-1" role="dialog" aria-labelledby="title-more" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-more">More Options</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-muted">
+                    More options
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
         </ul>
       </div>
@@ -137,100 +337,22 @@ Vue.component('app-footer', {
     `
 });
 
-const Description = Vue.component('description', {
-  template: `
-    <section class="features" id="features">
-      <div class="container">
-        <div class="section-heading text-center">
-          <h2 class="fadeInDown animated" >Documentation</h2>
-          <p class="fadeInRight animated">Weconnec intends to resolve the need for a central platform that allows, primarily students to 
-          share resources among themselves. Often times barriers impede how effective study resources are shared
-           among students. One such barrier is association.  Students may not know the right persons 
-           to be affiliated with in order to get helpful resources.  In addition, the project also seeks
-            to enhance how efficient students can manipulate study resources.  "WeConnec" is a web-based 
-            platform that grants users access to a library of documents as well as allow them to share documents 
-            with persons from their friend list after signing up for an account. Users have the option of making 
-            uploaded resources public or private. The platform's main function is to allow users to search through
-             a large pool of documents return relevant information based on the query in a timely manner. 
-             Another function that the project will implement is an answer search engine, this will allow users 
-             to pose a question after which a response, formulated from uploaded documents, will be returned. 
-             This response should have the correct answer for the question or if the engine could not find an 
-             appropriate answer it should suggest some resources that might contain the desired answer. </p>
-          <hr>
-        </div>
-        <div class="row">
-          <div class="col-lg-4 my-auto">
-            <div class="device-container">
-              <div class="device-mockup ipad_pro portrait white bounceInLeft animated">
-                <div class="device">
-                  <div class="screen">
-                    <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
-                    <img src="img/demo-screen-1.jpg" class="img-fluid" alt="">
-                  </div>
-                  <div class="button">
-                    <!-- You can hook the "home button" to some JavaScript events or just remove it -->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-8 my-auto">
-            <div class="container-fluid ">
-
-              <div class="row ">
-                <div class="col-lg-6">
-                  <div class="feature-item slideInRight animated">
-                  <i class="fas fa-mobile-alt"></i>
-                    <h3>Mobile Friendly</h3>
-                    <p >Ready to use HTML/CSS device mockups, no Photoshop required!</p>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="feature-item slideInRight animated">
-                    <i class="far fa-comments"></i>
-                    <h3>Chat</h3>
-                    <p >Put an image, video, animation, or anything else in the screen!</p>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-6">
-                  <div class="feature-item slideInRight animated">
-                    <i class="fas fa-search"></i>
-                    <h3>Refined Search</h3>
-                    <p >As always, this theme is free to download and use for any purpose!</p>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="feature-item slideInRight animated">
-                    <i class="fas fa-graduation-cap"></i>
-                    <h3>Huge library of resources</h3>
-                    <p >Since this theme is MIT licensed, you can use it commercially!</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-   `
-});
 
 Vue.component('card', {
   template: `
+
   <div class="card">
-    <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif"  alt="Card image cap">
-    <div class="card-body">
-      <h5 class="card-title">{{title}}</h5>
-      <p><i class="fa fa-tags"></i> Tags: <a href=""><span class="badge badge-info">#waves</span></a> <a href=""><span class="badge badge-info">#CSS</span></a> <a href=""><span class="badge badge-info">#Vue.js</span></a></p>
-      <p class="card-text">{{caption}} </p>
-      <p class="card-text"><small class="text-muted">Posted By: @{{username}} on {{date_post}}</small></p>
-    </div>
-    <p v-if="this.username===this.user">
+
+  <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif"  alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title text-center">{{title}}</h5>
+    <p><i class="fa fa-tags"></i> Tags: <a href=""><span class="badge badge-info">#waves</span></a> <a href=""><span class="badge badge-info">#CSS</span></a> <a href=""><span class="badge badge-info">#Vue.js</span></a></p>
+    <p class="card-text">{{caption}}</p>
+    <p class="card-text"><small class="text-muted">Posted By: @{{username}} on {{date_post}}</small><p v-if="this.username===this.user">
       <button @click="delete_post" class="fas fa-trash-alt float-right"></button>
-    </p>
+    </p></p>
   </div>
+</div>
   `,props:{
     id:String,
     title:String,
@@ -287,6 +409,64 @@ Vue.component('card', {
   }
 });
 
+Vue.component('searchbar', {
+  template: `
+  <form  id="searchform" @submit.prevent="searchform" method="POST" enctype="multipart/form-data">
+            <div id="custom-search-input" class=" fadeInDown animated">
+                <div class="input-group col-md-12 ">
+                <input class="form-control input-lg" type="text" name="search" v-model="search" id="search" placeholder="search" >
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-lg" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+        </div>
+        </form>
+  `,data:function(){
+    return {
+      posts: [],
+      errors:[]
+    }
+  },
+
+  methods:{ 
+    searchform: function(e) {
+        e.preventDefault();
+        let self = this;
+        self.errors = [];
+        let form_data = new FormData();
+        if(self.search){form_data.append('search',self.search);}
+        fetch("/api/search", { 
+        method: 'POST',
+        body: form_data,
+        headers: {
+                'X-CSRFToken': token
+            },
+        credentials: 'same-origin'
+        
+        })
+        .then(function (response) {
+          if (!response.ok) {
+throw Error(response.statusText);
+}
+            return response.json();
+        })
+        .then(function (jsonResponse) {
+             if(jsonResponse.errors) {
+        self.errors.push(jsonResponse.errors);
+      }else{
+        // get list of post results and display on search page
+        console.log(jsonResponse);
+      }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+  }
+});
+
 
 const Search =Vue.component('search', {
     template: `
@@ -309,18 +489,8 @@ const Search =Vue.component('search', {
                 <li v-for="message in messages">{{ message }}</li>
               </ul>
             </p>
-            <form  id="searchform" @submit.prevent="searchform" method="POST" enctype="multipart/form-data">
-            <div id="custom-search-input" class=" fadeInUp animated">
-                <div class="input-group col-md-12 ">
-                <input class="form-control input-lg" type="text" name="search" v-model="search" id="search" placeholder="search" >
-                    <span class="input-group-btn">
-                        <button class="btn btn-info btn-lg" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </span>
-                </div>
-        </div>
-        </form><hr>
+            <searchbar></searchbar>
+            <hr>
           <div class="card-columns"><hr>
             <card  v-for="post in posts"
               v-bind:key="post.id"
@@ -346,43 +516,7 @@ const Search =Vue.component('search', {
       messages:[],
       search:''
     }
-  },
-      
-    searchform: function () {
-        let self = this;
-        self.errors = [];
-        let form_data = new FormData();
-        if(self.search){form_data.append('search',self.search);}
-        fetch("/api/posts/new", { 
-        method: 'POST',
-        body: form_data,
-        headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('jwt_token'),
-                'X-CSRFToken': token
-            },
-        credentials: 'same-origin'
-        
-        })
-        .then(function (response) {
-          if (!response.ok) {
-throw Error(response.statusText);
-}
-            return response.json();
-        })
-        .then(function (jsonResponse) {
-             if(jsonResponse.errors) {
-        self.errors.push(jsonResponse.errors);
-      }else{
-        if(jsonResponse.messages) {
-        self.messages.push(jsonResponse.messages);
-      }
-        console.log(jsonResponse);
-      }
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    }
+  }
     
 });
 
@@ -397,8 +531,8 @@ const Home = Vue.component('home',{
           
             <div class="header-content mx-auto  ">
               <h1 class="mb-5 flipInY wow animated">'weconnec' is platform for students to gain access to a library of publicly or privately shared documents.</h1>
-              <router-link class="btn bounceInUp animated btn-outline-light " to="/description"> Learn More</router-link>
-              <button type="button" class="btn bounceInUp wow animated btn-outline btn-xl" data-toggle="modal" data-target="#exampleModalCenter">Register Now</button>
+              <button type="button" class="btn bounceInUp animated btn-outline-light " data-target="#about-modal" data-toggle="modal">Learn More</button>
+              <button type="button" class="btn bounceInUp wow animated btn btn-outline-warning" data-toggle="modal" data-target="#register-modal">Register Now</button>
             
             </div>
                           </div>
@@ -419,7 +553,7 @@ const Home = Vue.component('home',{
           </div>
         </div>
 
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
 
@@ -445,7 +579,7 @@ const Home = Vue.component('home',{
             <form id="registerform" @submit.prevent="registerform" method="POST" enctype="multipart/form-data" novalidate="true">
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="first_name">First Name</label>
+                <label for="first_name ">First Name</label>
                 <input class="form-control" type="text" name="first_name" v-model="first_name" id="fname" placeholder="First Name" >
               </div>
               <div class="form-group col-md-6">
@@ -476,7 +610,7 @@ const Home = Vue.component('home',{
           </div>
           <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="sumbit" class="btn btn-primary" >Register</button>
+                <button type="sumbit" class="btn btn-warning" >Register</button>
               </div>
               </form>
         </div>
@@ -550,64 +684,41 @@ const Home = Vue.component('home',{
 
 const Profile = Vue.component('profile',{
   template:`
+  <section>
     <div class="container fadeIn animated">
+    <div class="container">
       <div class="row">
-        <div class="col-md-8">
-          <h1 class="my-4">Page Heading
-            <small>Secondary Text</small>
-          </h1>
         <div class="col-md-4">
           <div class="card my-4">
-            <h5 class="card-header">Search</h5>
+            <h5 class="card-header">Profile</h5>
             <div class="card-body">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-secondary" type="button">Go!</button>
-                </span>
-              </div>
+              <p>Profile preview</p>
             </div>
           </div>
-          <div class="card my-4">
-            <h5 class="card-header">Categories</h5>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-lg-6">
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="#">Web Design</a>
-                    </li>
-                    <li>
-                      <a href="#">HTML</a>
-                    </li>
-                    <li>
-                      <a href="#">Freebies</a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-lg-6">
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="#">JavaScript</a>
-                    </li>
-                    <li>
-                      <a href="#">CSS</a>
-                    </li>
-                    <li>
-                      <a href="#">Tutorials</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card my-4">
-            <h5 class="card-header">Side Widget</h5>
-            <div class="card-body">
-              You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!
-            </div>
-          </div>
-          <div class="card-columns"><hr>
+          <div class="accordion" id="accordionExample">
+  <div class="card my-4">
+    <div class="card-header" id="headingOne">
+      <h5 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          More options
+        </button>
+      </h5>
+    </div>
+
+    <div id="collapseOne" class="collapse hide" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+      </div>
+    </div>
+  </div>
+
+  </div>
+        </div>
+        <div class="col-md-8">
+          <h1>Resources</h1><a href="#upload-modal" data-toggle="modal">Upload new</a>
+          <hr>
+          
+          <div class="card-columns">
             <card  v-for="post in posts"
               v-bind:key="post.id"
               v-bind:title="post.title" 
@@ -616,8 +727,9 @@ const Profile = Vue.component('profile',{
               v-bind:photo="post.photo"
               v-bind:username="post.username">
             </card>
-            </div>
-            <ul class="pagination justify-content-center mb-4">
+          </div>
+
+          <ul class="pagination justify-content-center mb-4">
             <li class="page-item">
               <a class="page-link" href="#">&larr; Older</a>
             </li>
@@ -626,17 +738,163 @@ const Profile = Vue.component('profile',{
             </li>
           </ul>
         </div>
-        </div>
       </div>
-    </div>`,
+
+    </div>
+    </div>
+    <div class="modal fade" id="upload-modal" tabindex="-1" role="dialog" aria-labelledby="title-upload" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-muted" id="title-upload">Upload</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p v-if="errors.length">
+                      <b>Please correct the following error(s):</b>
+                      <ul>
+                        <li v-for="error in errors">{{ error }}</li>
+                      </ul>
+                      </p>
+                       <p class="alert alert-success" role="alert" v-if="messages.length">
+                      <ul>
+                        <li v-for="message in messages">{{ message }}</li>
+                      </ul>
+                    </p>
+                    <form id="uploadForm"  @submit.prevent="uploadPost" method="POST" enctype="multipart/form-data">
+                      <label class="input-group" for="file">Upload file</label>
+                      <input ref="fileInput" style="display:none" v-on:change="onSelectedFile" class="form-control" id="file"  type="file" :name="file"/>
+                      <br>
+                      <a class="btn btn-secondary" @click="$refs.fileInput.click()">Select file</a>
+                      <br>
+                      <label class="input-group" for="description">Description</label>
+                      <textarea class="form-control" rows="3"  v-model="description" placeholder="Write a description..." id="description" name="description"></textarea>
+                      <br>
+                      <label class="input-group" for="tags">Tags</label>
+                      <textarea class="form-control" rows="2"  v-model="tags" placeholder="Add tags (optional)" id="tags" name="tags"></textarea><br>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="sumbit" class="btn btn-warning" >Upload</button>
+                      </div>
+                    </form>
+    
+                  </div>
+                </div>
+              </div>
+            </div>
+    </section>`,
     data:function(){
     return {
       posts: [
 { id: 1, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__'},
-      { id: 3, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} 
+      { id: 3, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} ,
+     { id: 4, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__'},
+      { id: 5, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} ,
+     { id: 6, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__'},
+      { id: 7, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} ,
+     { id: 78, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__'},
+      { id: 8, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} 
+     
      ],
       errors:[],
-      messages:[]
+      messages:[],
+      description:'',
+      tags:'',
+      file:null
+    }
+  }
+  ,
+ created: function () {
+            let self = this;
+            if(localStorage.getItem('jwt_token')!==null){
+                fetch("/api/uploads/all", { 
+                method: 'GET',
+                headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('jwt_token'),
+                        'X-CSRFToken': token
+                    },
+                credentials: 'same-origin'
+                
+                })
+                .then(function (response) {
+                if (!response.ok) {
+          throw Error(response.statusText);
+
+               };
+              return response.json();
+        })
+        .then(function (jsonResponse) {
+          if(jsonResponse.errors) {
+            self.errors.push(jsonResponse.errors);
+          }else{
+                    self.posts=jsonResponse.posts;
+                    console.log(self.posts);
+                  }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
+        },methods: {
+
+      onSelectedFile: function(event){
+        let self=this;
+        self.file=event.target.files[0];
+      },
+      
+        uploadPost: function () {
+            let self = this;
+            self.errors = [];
+            let form_data = new FormData();
+
+          if(self.file){form_data.append('files',self.file);}
+        if(self.tags){form_data.append('tags',self.tags);}
+        
+        
+        form_data.append('description',self.description);
+            fetch("/api/uploads/new", { 
+            method: 'POST',
+            body: form_data,
+            headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwt_token'),
+                    'X-CSRFToken': token
+                },
+            credentials: 'same-origin'
+            
+            })
+            .then(function (response) {
+              if (!response.ok) {
+    throw Error(response.statusText);
+  }
+                return response.json();
+            })
+            .then(function (jsonResponse) {
+                 if(jsonResponse.errors) {
+            self.errors.push(jsonResponse.errors);
+          }else{
+            if(jsonResponse.messages) {
+            self.messages.push(jsonResponse.messages);
+          }
+            console.log(jsonResponse);
+          }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
+    }
+});
+
+// Vuex State Management for user authentication
+const store = new Vuex.Store({
+  state: {
+    isLoggedIn: !!localStorage.getItem("jwt_token")
+  },
+  actions:{
+    logout() {
+      localStorage.removeItem("jwt_token");
     }
   }
 });
@@ -646,7 +904,6 @@ const router = new VueRouter({
     routes: [
     { path: "/", component: Home },
     { path: "/search", component: Search },
-    { path: "/description", component: Description },
     { path: "/profile", component:Profile}
     ]
 });
@@ -654,5 +911,5 @@ const router = new VueRouter({
 // Instantiate our main Vue Instance
 let app = new Vue({
     el: "#app",
-    router
+    router,store
 });

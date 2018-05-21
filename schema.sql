@@ -16,12 +16,13 @@ create table users(
 	primary key (user_id)
 );
 
-drop table if exists posts;
-create table posts(
+drop table if exists uploads;
+create table uploads(
 	id varchar(80),
 	user_id int,
 	image_URI varchar(80),
-	caption varchar(120),
+	description varchar(120),
+	tags varchar(120),
 	created_on date,
 	primary key (post_id),
 	foreign key (user_id) references users(user_id) on delete cascade on update cascade
