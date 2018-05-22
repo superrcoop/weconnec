@@ -233,5 +233,22 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
   color: #fcbd20;
 }
 
+.card-title{
+  font-weight: 800px;
+  color: black;
+}
+
+.card-text{
+  color: black;
+}
+
+.card{
+  font-family: 'Montserrat', sans-serif;
+  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.4), 0 10px 26px 0 rgba(0, 0, 0, 0.20);
+}
+
+.card img{
+    width: 50px;
+}
 
 

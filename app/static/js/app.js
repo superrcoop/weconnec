@@ -340,19 +340,27 @@ Vue.component('app-footer', {
 
 Vue.component('card', {
   template: `
-
-  <div class="card">
-
-  <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif"  alt="Card image cap">
-  <div class="card-body">
-    <h5 class="card-title text-center">{{title}}</h5>
-    <p><i class="fa fa-tags"></i> Tags: <a href=""><span class="badge badge-info">#waves</span></a> <a href=""><span class="badge badge-info">#CSS</span></a> <a href=""><span class="badge badge-info">#Vue.js</span></a></p>
-    <p class="card-text">{{caption}}</p>
-    <p class="card-text"><small class="text-muted">Posted By: @{{username}} on {{date_post}}</small><p v-if="this.username===this.user">
-      <button @click="delete_post" class="fas fa-trash-alt float-right"></button>
-    </p></p>
+<div class="container py-3">
+    <div class="card slideInUp animated">
+      <div class="row ">
+        <div class="col-sm-2">
+            <img src="http://www.proher-natura.com/e-commerce/themes/images/icon-pdf.png" alt="Card image cap">
+          </div>
+          <div class="col-md-8 px-2">
+            <div class="card-block px-2">
+              <h3><a href="#" class="card-title">{{title}}</a></h3>
+              <p  class="card-text "><small class="px-1" v-for="tag in this.tags">
+                <a href="#" class=" badge badge-pill badge-warning">{{tag}}</a>
+              </small>
+              </p>
+              <p class="card-text text-muted">{{caption}}</p>
+              <p class="card-text"><small class="text-muted">Posted By: @{{username}} on {{date_post}}</small><p v-if="this.username===this.user"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
   `,props:{
     id:String,
     title:String,
@@ -718,16 +726,15 @@ const Profile = Vue.component('profile',{
           <h1>Resources</h1><a href="#upload-modal" data-toggle="modal">Upload new</a>
           <hr>
           
-          <div class="card-columns">
             <card  v-for="post in posts"
               v-bind:key="post.id"
               v-bind:title="post.title" 
               v-bind:caption="post.caption"
               v-bind:date_post="post.date_post"
-              v-bind:photo="post.photo"
+              v-bind:tags="post.tags"
               v-bind:username="post.username">
             </card>
-          </div>
+          
 
           <ul class="pagination justify-content-center mb-4">
             <li class="page-item">
@@ -788,16 +795,10 @@ const Profile = Vue.component('profile',{
     data:function(){
     return {
       posts: [
-{ id: 1, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__'},
-      { id: 3, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} ,
-     { id: 4, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__'},
-      { id: 5, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} ,
-     { id: 6, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__'},
-      { id: 7, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} ,
-     { id: 78, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__'},
-      { id: 8, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__'} 
-     
-     ],
+{ id: 1, title: 'Data Science infographic',caption:'CS2390 Database administraion - Data Science',date_post:'Feb 2017' ,username:'superrcoop',tags:['Datascience','Artificial Intelligence','Deep Learning']},
+      { id: 3, title: 'CyberCrimes Act 2015',caption:'AN ACT to Repeal and replace the Cybercrimes Act.',date_post:'May 2018',username:'superrcoop',tags:['CS2390','cybercrime','security']} ,
+     { id: 4, title: 'Blockchain and cyrptocurrencies',caption:'Today cryptocurrencies (Buy Crypto) have become a global phenomenon known to most people.',date_post:'Feb 2013' ,username:'superrcoop',tags:['Bitcoin','Crytocurrencies','finance','technology','bubble','future','wealth']},
+      ],
       errors:[],
       messages:[],
       description:'',
