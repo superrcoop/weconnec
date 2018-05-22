@@ -491,6 +491,7 @@ Vue.component('searchbar', {
         </form>
   `,data:function(){
     return {
+      errors:[],
       search:''
     }
   },
@@ -522,7 +523,7 @@ Vue.component('searchbar', {
         self.errors.push(jsonResponse.errors);
         console.log(jsonResponse.errors);
       }else{
-        this.resources=jsonResponse.resources
+        self.resourcesArray=jsonResponse.resources;
         console.log(jsonResponse);
       }
         })
@@ -544,10 +545,10 @@ const Search =Vue.component('search', {
           <div class="col-md-8 mx-auto">
           <searchbar></searchbar>
             <hr>
-            <card  v-for="post in resources"
+            <card  v-for="post in resourcesArray"
               v-bind:key="post.id"
               v-bind:title="post.title" 
-              v-bind:caption="post.description"
+              v-bind:description="post.description"
               v-bind:date_post="post.date_post"
               v-bind:tags="post.tags"
               v-bind:username="post.username">
@@ -555,9 +556,10 @@ const Search =Vue.component('search', {
           </div>
       </div>
     </section>
-        `,data:function(){
+        `,
+        data:function(){
     return {
-      resources:this.resources
+      resourcesArray: []
     }
   }
 });
