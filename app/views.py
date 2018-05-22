@@ -52,26 +52,34 @@ def index():
 @app.route('/api/search', methods = ['POST'])
 def search():
     error=None
-    form = searchForm()
+    form = SearchForm()
     if request.method =='POST' and form.validate_on_submit():
-        # strip search term and tokenize for comparison
-        #resources=Posts.query.order_by(Posts.created_on.desc()).all() ----> [by user]
+        """ tokenize form data for search optimaztion
+            
+        """
+        resources=[
+        { 'id': 1,
+         'title': 'Air Traffic Control Paper Strips',
+         'description':'Air traffic control is a classic example of a safety-critical\
+          system involving high risks. Controllers hold the fates of thousands of people\
+           in their hands',
+           'date_post':'Feb 2018',
+           'username':'__meleku__',
+           'tags':['Air trafficking','computing','case study']},
+        { 'id': 3,
+       'title': 'CS2180',
+       'description':'Online security Tutorial solutions',
+       'date_post':'Mar 2018' ,'username':'_one_true_vison_',
+       'tags':['security','tutorial','cryptograpy','solution','cs2180']} 
+        ]
         responses=[]
         for i in range (0,len(resources)):
-            if resource_match(responses[i],search): # implement python spacy here, if true 
-                user=Users.query.filter_by(id=resources[i].user_id).first();
-                resource={
-                'id':resources[i].id,
-                'photo':resources[i].image_URI,#get_resource(posts[i].image_URI),
-                'caption':resources[i].caption,
-                'date_post':resources[i].created_on,
-                'username':user.user_name,
-                'userphoto':user.profile_photo
-                }
-                responses.append(resource)
-        return jsonify({'resources': resources})
+            #if resource_match(responses[i],search): # implement python spacy here, if true 
+                #user=Users.query.filter_by(id=resources[i].user_id).first();
+            responses.append(resources[i])
+        return jsonify({'resources': responses})
     else:
-        return jsonify({'errors':error})
+        return jsonify({'errors':form_errors(form)})
 
 
 """ A P I

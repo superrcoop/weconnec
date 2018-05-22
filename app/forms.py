@@ -4,6 +4,8 @@ from wtforms.validators import Required, Email,Length, EqualTo, DataRequired
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg','docx','pdf','ppt','txt','odf','doc'])
+
 class LoginForm(FlaskForm):
 
 	username = StringField('Username', validators = [DataRequired('Please provide an email address')])

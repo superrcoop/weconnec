@@ -306,8 +306,50 @@ Vue.component('app-footer', {
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <div class="modal-body text-muted">
-                    contact form goes here
+                  <div class="modal-body text-muted ">
+                  Use the form below to send us your comments or report any problems you experienced finding information on our website.
+                   We read all feedback carefully, but please note that we cannot respond to the comments you submit.<hr><br>
+                  <p class="alert alert-success" role="alert" v-if="messages.length">
+              <ul>
+                <li v-for="message in messages">{{ message }}</li>
+              </ul>
+            </p>
+            <p class="alert alert-danger" role="alert" v-if="errors.length">
+              <b>Please correct the following error(s):</b>
+              <ul>
+                <li v-for="error in errors">{{ error }}</li>
+              </ul>
+            </p>
+            <form id="contactform" @submit.prevent="contactform" method="POST" enctype="multipart/form-data" novalidate="true">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <input class="form-control" type="text" name="first_name" v-model="first_name" id="fname" placeholder="First Name" >
+              </div>
+              <div class="form-group col-md-6">
+                <input class="form-control" type="text" name="last_name" v-model="last_name" id="lname" placeholder="Last Name">
+              </div>
+            </div>
+            <div class="form-row">
+            <div class="form-group col-md-6">
+                <input class="form-control" type="text" name="subject" v-model="subject" id="subject" placeholder="Subject" >
+                
+              </div>
+              <div class="form-group col-md-6">
+                <input class="form-control" type="email" name="email" v-model="email" id="email" placeholder="Email" >
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <textarea class="form-control" row="5" type="text" name="message" v-model="message" id="message" placeholder="Message" ></textarea>
+              </div>
+          </div>
+          <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="sumbit" class="btn btn-warning" >Send</button>
+              </div>
+              </form>
+
+
                   </div>
                 </div>
               </div>
@@ -334,41 +376,95 @@ Vue.component('app-footer', {
         </ul>
       </div>
     </footer>
-    `
+    `,
+  data: function(){
+    return{
+      errors:[],
+      messages:[],
+      subject:null,
+      first_name:null,
+      last_name:null,
+      email:null,
+      message:null
+    }
+  },
+  methods: {
+    checkForm:function(e) {
+      if(this.first_name && this.last_name && this.email && this.plain_password && this.conf_password){return true;} 
+      this.errors = [];
+      if(!this.first_name){this.errors.push("First name required.");}
+      if(!this.last_name){this.errors.push("Last name required.");}
+      if(!this.email){this.errors.push("Email required.");}
+      if(!this.plain_password){this.errors.push("Password required.");}
+      if(!this.conf_password){this.errors.push("Confirm your password");}
+      e.preventDefault();
+    },
+    contactform:function(e) {
+      e.preventDefault();
+      this.errors = [];
+      let self=this;
+      
+      let uploadForm = document.getElementById('registerform');
+      let form_data = new FormData(uploadForm);
+      fetch('/api/users/register', {
+        method: 'POST',
+        body: form_data,
+        headers: { 
+            'X-CSRFToken': token
+          },
+          credentials: 'same-origin'
+      })
+        .then(function (response) {
+          if (!response.ok) {
+            throw Error(response.statusText);
+          }
+          return response.json();
+        })
+        .then(function (jsonResponse) {
+          if(jsonResponse.errors) {
+            console.log(jsonResponse.errors);
+            self.errors.push(jsonResponse.errors);
+          }else{
+            console.log(jsonResponse.messages); 
+            self.messages.push(jsonResponse.messages);
+          }; 
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
+    }
 });
 
 Vue.component('card', {
   template: `
-<div class="container py-3">
-    <div class="card slideInUp animated">
+    <div class="card mb-3 slideInUp animated">
       <div class="row ">
-        <div class="col-sm-2">
-            <img src="http://www.proher-natura.com/e-commerce/themes/images/icon-pdf.png" alt="Card image cap">
-          </div>
-          <div class="col-md-8 px-2">
-            <div class="card-block px-2">
-              <h3><a href="#" class="card-title">{{title}}</a></h3>
-              <p  class="card-text "><small class="px-1" v-for="tag in this.tags">
-                <a href="#" class=" badge badge-pill badge-warning">{{tag}}</a>
-              </small>
-              </p>
-              <p class="card-text">Your might find this document useful to your search</p>
-              <p class="card-text text-muted">{{caption}}</p>
-              <p class="card-text"><small class="text-muted">Posted By: @{{username}} on {{date_post}}</small><p v-if="this.username===this.user"></p>
-            </div>
+        <div class="col-sm-2 mb-2">
+          <img src="http://www.proher-natura.com/e-commerce/themes/images/icon-pdf.png" alt="Card image cap">
+        </div>
+        <div class="col-md-8 ">
+          <div class="card-block ">
+            <h3><a href="#" class="card-title">{{title}}</a></h3>
+            <p  class="card-text "><small class="px-1" v-for="tag in this.tags">
+              <a href="#" class=" badge badge-pill badge-warning">{{tag}}</a>
+            </small>
+            </p>
+            <p class="card-text">Your might find this document useful to your search</p>
+            <p class="card-text text-muted">{{description}}</p>
+            <p class="card-text"><small class="text-muted">Posted By: @{{username}} on {{date_post}}</small><p v-if="this.username===this.user"></p>
           </div>
         </div>
       </div>
     </div>
-  </div>
+ 
   `,props:{
     id:String,
     title:String,
     username:String,
     date_post:String,
     tags:Array,
-    caption:String,
-    photo:String
+    description:String
   },
   data:function(){
     return {
@@ -395,8 +491,6 @@ Vue.component('searchbar', {
         </form>
   `,data:function(){
     return {
-      posts: [],
-      errors:[],
       search:''
     }
   },
@@ -419,15 +513,16 @@ Vue.component('searchbar', {
         })
         .then(function (response) {
           if (!response.ok) {
-throw Error(response.statusText);
-}
+      throw Error(response.statusText);
+        }
             return response.json();
         })
         .then(function (jsonResponse) {
              if(jsonResponse.errors) {
         self.errors.push(jsonResponse.errors);
+        console.log(jsonResponse.errors);
       }else{
-        // get list of post results and display on search page
+        this.resources=jsonResponse.resources
         console.log(jsonResponse);
       }
         })
@@ -441,51 +536,30 @@ throw Error(response.statusText);
 
 const Search =Vue.component('search', {
     template: `
-    <section class="features" id="features">
-      <div class="container">
+    <section class="search" id="search">
+      <div class="container h-100">
         <div class="section-heading text-center slideInRight wow animated">
           <h2>Ask a Question or search for a document by title or content.</h2>
         </div>
           <div class="col-md-8 mx-auto">
           <searchbar></searchbar>
-            <p class="alert alert-danger" role="alert" v-if="errors.length">
-            <b>Please correct the following error(s):</b>
-            <ul>
-              <li v-for="error in errors">{{ error }}</li>
-            </ul>
-            </p>
-            <p class="alert alert-success" role="alert" v-if="messages.length">
-              <ul>
-                <li v-for="message in messages">{{ message }}</li>
-              </ul>
-            </p>
-            
             <hr>
-            <card  v-for="post in posts"
+            <card  v-for="post in resources"
               v-bind:key="post.id"
               v-bind:title="post.title" 
-              v-bind:caption="post.caption"
+              v-bind:caption="post.description"
               v-bind:date_post="post.date_post"
-              v-bind:photo="post.photo"
               v-bind:tags="post.tags"
               v-bind:username="post.username">
             </card>
           </div>
       </div>
     </section>
-        `,
-  data:function(){
+        `,data:function(){
     return {
-      posts: [
-{ id: 1, title: 'My journey with Vue',caption:'It is so easy',date_post:'Feb 2018',photo:'https://vuejs.org/images/logo.png' ,username:'__me__',tags:['this','is','a','tag']},
-      { id: 3, title: 'Why Vue is so fun',caption:'You just plug and go',date_post:'Mar 2018',photo:'https://react-etc.net/files/2015-11/danguu.jpg' ,username:'__me__',tags:['this','is','a','tag']} 
-     ],
-      errors:[],
-      messages:[],
-      search:''
+      resources:this.resources
     }
   }
-    
 });
 
 
@@ -547,32 +621,28 @@ const Home = Vue.component('home',{
             <form id="registerform" @submit.prevent="registerform" method="POST" enctype="multipart/form-data" novalidate="true">
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="first_name ">First Name</label>
-                <input class="form-control" type="text" name="first_name" v-model="first_name" id="fname" placeholder="First Name" >
+                <input class="form-control" type="text" name="first_name" v-model="first_name" id="fname" placeholder="First Name" ><hr>
               </div>
               <div class="form-group col-md-6">
-                <label for="last_name">Last Name</label>
-                <input class="form-control" type="text" name="last_name" v-model="last_name" id="lname" placeholder="Last Name">
+                <input class="form-control" type="text" name="last_name" v-model="last_name" id="lname" placeholder="Last Name"><hr>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="email">Email</label>
                 <input class="form-control" type="email" name="email" v-model="email" id="email" placeholder="Email" >
+                <hr>
               </div>
               <div class="form-group col-md-6">
-                <label for="username">Username</label>
                 <input class="form-control" type="text" name="username" v-model="username" id="username" placeholder="Username" >
+                <hr>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="plain_password">Password</label>
                 <input class="form-control" type="Password" name="plain_password" v-model="plain_password" id="plain_password" placeholder="Password" >
                 <small id="passwordHelpBlock" class="form-text text-muted">Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.</small>
               </div>
             <div class="form-group col-md-6">
-              <label for="conf_password">Confirm Password</label>
               <input class="form-control" type="password" name="conf_password" v-model="conf_password" id="conf_password" placeholder="Confirm Password" >
             </div>
           </div>
@@ -672,5 +742,8 @@ const router = new VueRouter({
 // Instantiate our main Vue Instance
 let app = new Vue({
     el: "#app",
+    data:{
+      resources:[]
+    },
     router,store
 });

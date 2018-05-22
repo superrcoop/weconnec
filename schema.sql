@@ -20,7 +20,7 @@ drop table if exists uploads;
 create table uploads(
 	id varchar(80),
 	user_id int,
-	image_URI varchar(80),
+	URI varchar(80),
 	description varchar(120),
 	tags varchar(120),
 	created_on date,

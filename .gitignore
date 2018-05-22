@@ -15,3 +15,6 @@ venv/
 
 # migrations
 /migrations
+
+# Resourcces
+app/static/uploads/resources/
