@@ -1,7 +1,7 @@
 from app import app, db, login_manager 
 from flask import render_template, request, session, redirect, url_for ,jsonify,g,_request_ctx_stack,flash
 from controllers import form_errors 
-from forms import LoginForm, RegistrationForm, SearchForm
+from forms import LoginForm, RegistrationForm, SearchForm , UploadForm
 from flask_login import login_user, logout_user, current_user, login_required
 from models import Users, Posts, Follows
 from werkzeug.utils import secure_filename
@@ -124,29 +124,24 @@ def register():
 @requires_auth
 def new_post():
     error=None
-    form = PostsForm(CombinedMultiDict((request.files, request.form)))
+    form = UploadForm(CombinedMultiDict((request.files, request.form)))
     if request.method =='POST' and form.validate_on_submit():
-        if form.photo.data:
-            photo=form.photo.data
-            caption = form.caption.data
-            if photo.filename == '':
+        if form.file.data:
+            tags=form.tags.data
+            description = form.description.data
+            file = form.file.data
+            if file.filename == '':
                 error='No selected file'
-            if photo and allowed_file(photo.filename):
-                filename = secure_filename(photo.filename)
-                newpost=Posts(user_id=current_user.id,image_URI=photo,caption=caption)
-                photo.save(os.path.join(newpost.image_URI, filename))
-                db.session.add(newpost)
-                db.session.commit()
+            if file: #and allowed_file(file)
+                filename = secure_filename(file.filename)
+                #newpost=Posts(user_id=current_user.id,image_URI=photo,caption=caption)
+                #file.save(os.path.join(newpost.image_URI, filename))
+                #db.session.add(newpost)
+                #db.session.commit()
                 return jsonify({'messages':'Photo Post successfully'})
             else:
                 error='File not allowed'
                 return jsonify({'errors': error})
-        else:
-            caption = form.caption.data
-            newpost=Posts(user_id=current_user.id,caption=caption)
-            db.session.add(newpost)
-            db.session.commit()
-            return jsonify({'messages':'Post successfully'})
     else:
         return jsonify({'errors':form_errors(form)})
 
@@ -181,6 +176,27 @@ def search():
         return jsonify({'errors':error})
 
 
+
+
+@app.route('/api/uploads/delete', methods = ['GET','POST'])
+@login_required
+def delete_post():
+    error=None
+    if request.method =='POST':
+        
+        data=request.data
+        post=Posts.query.filter_by(id=data.id).first();
+        if post:
+            db.session.delete(post)
+            db.session.commit()
+            return jsonify({'messages':'Post sucessfully deleted'})
+    
+        return jsonify({'messages':'Post received'})
+    else:
+        return jsonify({'errors':error})
+
+
+""" A P I
 @app.route('/api/uploads/all', methods = ['GET'])
 @login_required
 def get_all_posts():
@@ -209,26 +225,6 @@ def get_all_posts():
         return jsonify({'posts': listposts})
     else:
         return jsonify({'errors':error})
-
-@app.route('/api/uploads/delete', methods = ['GET','POST'])
-@login_required
-def delete_post():
-    error=None
-    if request.method =='POST':
-        
-        data=request.data
-        post=Posts.query.filter_by(id=data.id).first();
-        if post:
-            db.session.delete(post)
-            db.session.commit()
-            return jsonify({'messages':'Post sucessfully deleted'})
-    
-        return jsonify({'messages':'Post received'})
-    else:
-        return jsonify({'errors':error})
-
-
-""" A P I
 
 @app.route('/api/users/<username>', methods = ['GET'])
 @login_required

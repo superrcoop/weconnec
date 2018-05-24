@@ -771,7 +771,8 @@ const Profile = Vue.component('profile',{
                       </ul>
                     </p>
                     <form id="uploadForm"  @submit.prevent="uploadPost" method="POST" enctype="multipart/form-data">
-                      <label class="input-group" for="file">Upload file</label>
+                      <label class="input-group" for="file">{{file}}</label>
+                      <img src="http://dummyimage.com/300x300/4d494d/686a82.gif&text=placeholder+image" alt="placeholder+image">
                       <input ref="fileInput" style="display:none" v-on:change="onSelectedFile" class="form-control" id="file"  type="file" :name="file"/>
                       <br>
                       <a class="btn btn-secondary" @click="$refs.fileInput.click()">Select file</a>
@@ -850,11 +851,9 @@ const Profile = Vue.component('profile',{
             self.errors = [];
             let form_data = new FormData();
 
-          if(self.file){form_data.append('files',self.file);}
-        if(self.tags){form_data.append('tags',self.tags);}
-        
-        
-        form_data.append('description',self.description);
+          form_data.append('files',self.file);
+          form_data.append('description',self.description);
+          if(self.tags){form_data.append('tags',self.tags);}
             fetch("/api/uploads/new", { 
             method: 'POST',
             body: form_data,
