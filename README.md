@@ -42,3 +42,13 @@ $ python flask-migrations.py db upgrade
 Run:
 
 `$ python run.py`
+
+Test search-engine:
+
+~~~
+$ pytest
+================== test session starts ===============================
+collected 1 items
+tests/test_search_engine.py 
+
+~~~
