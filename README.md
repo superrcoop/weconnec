@@ -1,8 +1,11 @@
-# weconnec
+# **weconnec**
 
 Description
 -------------------
+
 A web-based platform that grants users access to a library of documents as well as allow them to share documents with persons from their friend list after signing up for an account. Users have the option of making uploaded resources public or private. The platform's main function is to allow users to search through a large pool of documents return relevant information based on the query in a timely manner.
+
+![](app/static/images/screenshots/results.png)
 
 Getting Started !
 -------------------
@@ -43,7 +46,10 @@ Run:
 
 `$ python run.py`
 
-Test search-engine:
+Running the tests
+--------------------
+
+The `pytest` framework makes it easy to write small tests, yet scales to support complex functional testing
 
 ~~~
 $ pytest
@@ -52,3 +58,37 @@ collected 1 items
 tests/test_search_engine.py 
 
 ~~~
+
+Contributing
+-------------
+
+When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
+
+1. Fork it (<https://github.com/yourname/yourproject/fork>)
+2. Create your feature branch (`git checkout -b feature/feature-name`)
+3. Commit your changes (`git commit -am 'Add some feature description'`)
+4. Push to the branch (`git push origin feature/featuren-ame`)
+5. Create a new Pull Request
+
+License
+------------
+
+This project is licensed under the GNU GENERAL PUBLIC LICENSE - see the [LICENSE](LICENSE) file for details
+
+
+Authors
+-----------
+
+* **[Jordan Cooper](https://jordancooper.me)**
+* **[Shanell Brown](https://github.com/Skillz-Interface)**
+* **[Nish Brown](https://github.com/Nisk2k)**
+* **[Paul Parker](https://github.com/paulp1995)**
+
+
+Release History
+------------------
+* 0.1.0
+    * The first real release
+    * Launch site ui/ux with minimal search capabilities
+* 0.0.1
+    * Work in progress
