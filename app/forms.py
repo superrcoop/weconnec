@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, TextAreaField
 from wtforms.validators import Required, Email,Length, EqualTo, DataRequired
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif','pdf'])
 
 class LoginForm(FlaskForm):
 
@@ -19,3 +20,10 @@ class RegistrationForm(FlaskForm):
 
 class SearchForm(FlaskForm):
 	search=	StringField('Search', validators = [DataRequired('Search something...')])
+
+class UploadForm(FlaskForm):
+	description=StringField('Description', validators = [DataRequired('Add a description')])
+	tags=StringField('Tags', validators=[Length(max=40,message=('Why so many tags bruh? '))])
+	file=FileField('file', validators=[FileAllowed(ALLOWED_EXTENSIONS, 'File not allowed')])
+	
+

@@ -16,8 +16,13 @@ venv/
 # migrations
 /migrations
 
+<<<<<<< HEAD
 # Uploads 
 /app/static/uploads/
 
 # Pytests
 .pytest_cache/
+=======
+# uploads
+/app/static/uploads/resources
+>>>>>>> develop
