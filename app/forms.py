@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, TextAreaField
 from wtforms.validators import Required, Email,Length, EqualTo, DataRequired
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif','pdf'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg','docx','pdf','ppt','txt','odf','doc'])
 
 class LoginForm(FlaskForm):
 

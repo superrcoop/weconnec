@@ -3,7 +3,7 @@ from flask import render_template, request, session, redirect, url_for ,jsonify,
 from controllers import form_errors 
 from forms import LoginForm, RegistrationForm, SearchForm , UploadForm
 from flask_login import login_user, logout_user, current_user, login_required
-from models import Users, Posts, Follows
+from models import Users, Resources, Follows
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import CombinedMultiDict
 import jwt ,os ,json
@@ -48,6 +48,41 @@ def requires_auth(f):
 def index():
     """Render website's initial page and let VueJS take over."""
     return render_template('index.html')
+
+@app.route('/api/search', methods = ['POST'])
+def search():
+    error=None
+    form = SearchForm()
+    if request.method =='POST' and form.validate_on_submit():
+        """ tokenize form data for search optimaztion
+            
+        """
+        resources=[
+        { 'id': 1,
+         'title': 'Air Traffic Control Paper Strips',
+         'description':'Air traffic control is a classic example of a safety-critical\
+          system involving high risks. Controllers hold the fates of thousands of people\
+           in their hands',
+           'date_post':'Feb 2018',
+           'username':'__meleku__',
+           'tags':['Air trafficking','computing','case study']},
+        { 'id': 3,
+       'title': 'CS2180',
+       'description':'Online security Tutorial solutions',
+       'date_post':'Mar 2018' ,'username':'_one_true_vison_',
+       'tags':['security','tutorial','cryptograpy','solution','cs2180']} 
+        ]
+        responses=[]
+        for i in range (0,len(resources)):
+            #if resource_match(responses[i],search): # implement python spacy here, if true 
+                #user=Users.query.filter_by(id=resources[i].user_id).first();
+            responses.append(resources[i])
+        return jsonify({'resources': responses})
+    else:
+        return jsonify({'errors':form_errors(form)})
+
+
+""" A P I
 
 @login_manager.user_loader
 def load_user(id):
@@ -122,7 +157,7 @@ def register():
 @app.route('/api/uploads/new', methods = ['POST'])
 @login_required
 @requires_auth
-def new_post():
+def new_upload():
     error=None
     form = UploadForm(CombinedMultiDict((request.files, request.form)))
     if request.method =='POST' and form.validate_on_submit():
@@ -145,58 +180,7 @@ def new_post():
     else:
         return jsonify({'errors':form_errors(form)})
 
-@app.route('/api/search', methods = ['GET'])
-def search():
-    error=None
-    form = searchForm()
-    if request.method =='GET' and form.validate_on_submit():
-        #python spacy
-        #posts=Posts.query.order_by(Posts.created_on.desc()).all() ----> [by user]
-        listposts=[]
-        liked=False
-        for i in range (0,len(posts)):
-            count=Likes.query.filter_by(post_id=posts[i].id).all()
-            user=Users.query.filter_by(id=posts[i].user_id).first();
-            if Likes.query.filter_by(post_id=posts[i].id, user_id=current_user.id):
-                liked=True
 
-            post_data={
-            'id':posts[i].id,
-            'photo':posts[i].image_URI,#get_uploaded_image(posts[i].image_URI),
-            'caption':posts[i].caption,
-            'date_post':posts[i].created_on,
-            'likes':len(count),
-            'liked':liked,
-            'username':user.user_name,
-            'userphoto':user.profile_photo
-            }
-            listposts.append(post_data)
-        return jsonify({'posts': listposts})
-    else:
-        return jsonify({'errors':error})
-
-
-
-
-@app.route('/api/uploads/delete', methods = ['GET','POST'])
-@login_required
-def delete_post():
-    error=None
-    if request.method =='POST':
-        
-        data=request.data
-        post=Posts.query.filter_by(id=data.id).first();
-        if post:
-            db.session.delete(post)
-            db.session.commit()
-            return jsonify({'messages':'Post sucessfully deleted'})
-    
-        return jsonify({'messages':'Post received'})
-    else:
-        return jsonify({'errors':error})
-
-
-""" A P I
 @app.route('/api/uploads/all', methods = ['GET'])
 @login_required
 def get_all_posts():
@@ -225,6 +209,24 @@ def get_all_posts():
         return jsonify({'posts': listposts})
     else:
         return jsonify({'errors':error})
+
+@app.route('/api/uploads/delete', methods = ['GET','POST'])
+@login_required
+def delete_post():
+    error=None
+    if request.method =='POST':
+        
+        data=request.data
+        post=Posts.query.filter_by(id=data.id).first();
+        if post:
+            db.session.delete(post)
+            db.session.commit()
+            return jsonify({'messages':'Post sucessfully deleted'})
+    
+        return jsonify({'messages':'Post received'})
+    else:
+        return jsonify({'errors':error})
+
 
 @app.route('/api/users/<username>', methods = ['GET'])
 @login_required
