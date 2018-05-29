@@ -52,4 +52,8 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
+def query_parser(query):
+    """
+        translate a texual expression into an arbitrarily complex query for searching
+    """
+    return search
